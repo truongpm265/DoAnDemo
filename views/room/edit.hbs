@@ -1,0 +1,26 @@
+<form action="" method="post">
+   <h1>Edit Room</h1>
+   Name: <input type="text" name="name" required value="{{ room.name }}">
+   <br><br>
+   Type Room: 
+   <select name="typeRoom" id="" value="{{room.typeRoom}}"> 
+    {{#each typeRoomList }}
+    <option value="{{_id}}">
+      {{ name }}
+    </option>
+    {{/each}}
+   </select>
+   <br><br>
+   Price: <input type="number" name="price" required value="{{ room.price }}">
+   <br><br>
+   Quantity: <input type="number" name="quantity" required min="0" value="{{ room.quantity }}">
+   <br><br>
+   Description: <input type="text" name="description" required min="0" value="{{ room.description }}">
+   <br><br>
+   Image: <input type="url" name="image" required value="{{ room.image }}">
+   <br><br>
+   <img src="{{ room.image }}" alt="" width="120" height="120">
+   <br><br>
+   <input class="btn btn-success" type="submit" value="Edit">
+   <a class="btn btn-warning" href="/room">Cancel</a>
+</form>

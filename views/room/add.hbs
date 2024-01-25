@@ -1,0 +1,24 @@
+<form action="" method="post">
+  <h1 class="">Add new room</h1>
+  Name: <input type="text" name="name" id="" required>
+  <br><br>
+  Type Room: 
+  <select name="typeRoom" id="">
+    {{#each typeRoomList }}
+    <option value="{{_id}}">
+      {{ name }}
+    </option>
+    {{/each}}
+  </select>
+  <br><br>
+  Price: <input type="number" name="price" id="" required min="0">
+  <br><br>
+  Quantity: <input type="number" name="quantity" id="" required min="0">
+  <br><br>
+  Description: <input type="text" name="description" id="" required min="0">
+  <br><br>
+  Image: <input type="url" name="image" id="" required>
+  <br><br>
+  <input class="btn" type="submit" value="Add">
+  <a class="btn" href="/room">Cancel</a>
+</form>

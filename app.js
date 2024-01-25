@@ -6,9 +6,22 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var roomRouter = require('./routes/room'); 
+var typeRoomRouter = require('./routes/typeRoom'); 
 
 var app = express();
 
+
+var mongoose = require('mongoose');
+var database = "mongodb://localhost:27017/finalProject";
+
+mongoose.connect(database)
+  .then(() => console.log('Connect to db successfull !'))
+  .catch((err) => console.log('conncect to db fail. error : ' + err));
+
+
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false}))  
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -21,6 +34,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/room', roomRouter);
+app.use('/typeRoom',typeRoomRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
