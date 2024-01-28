@@ -13,11 +13,10 @@ var UserSchema = mongoose.Schema(
         role: {
             type: String,
         },
-        phone: {
-            type: String
-        },
         address: {
             type: String
         }
     }
 );
+var UserModel = mongoose.model("users", UserSchema);
+module.exports = UserModel;

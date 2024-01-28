@@ -1,0 +1,27 @@
+<h1 class="container text-center">Room List</h1>
+<div class="container mb-2">
+   <a class="btn btn-success container " href="/typeRoom/add">Add new Type</a>
+</div>
+
+<table class="table table-primary">
+   <tr>
+      <th>Room</th>
+      <th>Name</th>
+      <th>Check-In</th>
+      <th>Check-Out</th>
+      <th>Total Price</th>
+      <th>Menu</th>
+   </tr>
+   {{#each reservationList }}
+   <tr>
+      <td>{{ roomId.name }}</td>
+      <td>{{ userId }}</td>
+      <td>{{ checkInDate }}</td>
+      <td>{{ checkOutDate }}</td>
+      <td>{{ totalPrice }}</td>
+      <td>
+
+      </td>
+   </tr>
+   {{/each}}
+</table>

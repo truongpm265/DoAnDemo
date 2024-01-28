@@ -1,21 +1,38 @@
-<form action="" method="post">
-   <h4 class="center-align bold">Add new Type Room</h4>
-   <div class="row">
-      <div class="input-field col s12 m4 offset-m4">
-         <label for="">Type Room Name</label>
-         <input class="validate" type="text" name="name" id="">
-      </div>
-   </div>
-   <div class="row">
-      <div class="input-field col s12 m4 offset-m4">
-         <label for="">Type Room Description</label>
-         <input class="validate" type="text" name="description" id="">
-      </div>
-   </div>
-   <div class="row">
-      <div class="col s12 m4 offset-m4 center-align">
-         <input class="btn" type="submit" value="Add">
-      </div>
-   </div>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Type Room</title>
+</head>
+<body>
+    <div class="container mt-4">
+        <form action="" method="post">
+            <h4 class="text-center fw-bold">Add New Type Room</h4>
+            <div class="row mt-3">
+                <div class="col-md-4 offset-md-4">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Type Room Name</label>
+                        <input type="text" class="form-control" name="name" id="name" required>
+                    </div>
+                </div>
+            </div>
 
+            <div class="row">
+                <div class="col-md-4 offset-md-4">
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Type Room Description</label>
+                        <input type="text" class="form-control" name="description" id="description" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 offset-md-4 text-center">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

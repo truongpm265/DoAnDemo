@@ -35,4 +35,9 @@ router.post('/edit/:id', async (req, res) => {
     var roomList = await RoomModel.find({ typeRoom: id }).populate('typeRoom');
     res.render('room/index', { roomList })
  });
+ router.get('/delete/:id', async (req, res) => {
+   var id = req.params.id;
+   await TypeRoomModel.findByIdAndDelete(id);
+   res.redirect('/typeRoom');
+});
 module.exports = router;
