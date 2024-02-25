@@ -6,11 +6,11 @@ var TypeRoomModel = require('../models/TypeRoomModel');
 
 router.get('/',async (req, res) => {
    var roomList = await RoomModel.find({}).populate('typeRoom');
-      res.render('index123', { roomList })
+      res.render('userHome', { roomList })
 });
 router.get('/user/',async (req, res) => {
    var roomList = await RoomModel.find({}).populate('typeRoom');
-      res.render('index123', { layout: 'user_layout',roomList  },)
+      res.render('userHome', { layout: 'user_layout',roomList  },)
 });
 router.get('/room', async(req,res)=>{
    var roomList = await RoomModel.find({}).populate('typeRoom');

@@ -3,17 +3,17 @@ var router = express.Router();
 var RoomModel = require('../models/RoomModel');
 var TypeRoomModel = require('../models/TypeRoomModel');
 var ReservationModel = require('../models/ReservationModel');
+const checkLoginSession = require('../middlewares/auth');
 const CustomerModel = require('../models/CustomerModel');
 const UserModel = require('../models/UserModel');
 const { body, validationResult } = require('express-validator');
 
 
-router.get('/', async (req, res) => {
+router.get('/',checkLoginSession, async (req, res) => {
     var reservationList = await ReservationModel.find({}).populate('room').populate('user');
     res.render('reservation/index', { reservationList })
 });
-router.get('/user', async (req, res) => {
-    toShortDate();
+router.get('/user',checkLoginSession, async (req, res) => {
     const reservations = await ReservationModel.find({ user: req.session.userId }).populate('room').populate('user');
     res.render('reservation/indexUser', { reservations, layout: 'user_layout' });
 });
@@ -173,11 +173,9 @@ router.post('/addReservation',
             });
             return;
         }
-
-        // Data from form is valid. Store reservation in session and redirect to confirmation page.
         req.session.reservation = {
             room: req.body.roomId,
-            user: req.session.userId, // Use the user ID from the session
+            user: req.session.userId, 
             checkInDate: req.body.checkInDate,
             checkOutDate: req.body.checkOutDate,
         };
@@ -190,13 +188,6 @@ function calculateTotalPrice(pricePerNight, checkInDate, checkOutDate) {
     const nights = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)); //do kết quả của phép tính là sự khác nhau giữa 2 ngày tính bằng mili giây nên phải chia cho số mili giây 1 ngày
     return pricePerNight * nights;
 }
-function toShortDate(isoDate) {
-    const date = new Date(isoDate);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0
-    const day = date.getDate();
 
-    return `${day}/${month}/${year}`;
-}
 
 module.exports = router;
