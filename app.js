@@ -3,16 +3,29 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const hbs = require('hbs');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var roomRouter = require('./routes/room'); 
 var typeRoomRouter = require('./routes/typeRoom');
 var reservationRouter = require('./routes/reservation');
+var authRouter = require('./routes/auth');
+
 
 
 
 var app = express();
+var session = require('express-session');
+//set session timeout
+const timeout = 10000 * 60 * 60 * 24;  // 24 hours (in milliseconds)
+//config session parameters
+app.use(session({
+  secret: "practice_makes_perfect",  // Secret key for signing the session ID cookie
+  resave: false,                     // Forces a session that is "uninitialized" to be saved to the store
+  saveUninitialized: true,           // Forces the session to be saved back to the session store
+  cookie: { maxAge: timeout },
+}));
 
 
 var mongoose = require('mongoose');
@@ -35,11 +48,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', roomRouter);
+app.use((req, res, next) => {
+  res.locals.username = req.session.username;
+  res.locals.userId = req.session.userId;
+  next();
+});
+
+app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/room', roomRouter);
 app.use('/typeRoom',typeRoomRouter);
 app.use('/reservation',reservationRouter);
+app.use('/auth', authRouter);
 
 
 
@@ -58,5 +78,11 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+hbs.registerHelper('formatDate', function(date) {
+  return new Date(date).toLocaleDateString('en-GB');
+});
+
 
 module.exports = app;

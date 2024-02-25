@@ -12,24 +12,26 @@
 </div> --}}
 <table class="table table-primary">
    <tr>
-      <th>Room name</th>
+      <th>Room Number</th>
+      <th>Room Name</th>
       <th>Type</th>
       <th>Price</th>
-      <th>Quantity</th>
       <th>Image</th>
       <th>Description</th>
+      <th>Availability</th>
       <th>Menu</th>
    </tr>
    {{#each roomList }}
    <tr>
+      <td>{{ roomNumber }}</td>
       <td>{{ name }}</td>
       <td>{{ typeRoom.name }}</td>
-      <td>${{ price }}</td>
-      <td>{{ quantity }}</td>
+      <td>{{ pricePerNight }}VNĐ</td>
       <td>
          <img src="{{ image }}" width="100" height="100">
       </td>
       <td>{{ description }}</td>
+      <td>{{#if availability}}Available{{else}}Unavailable{{/if}}</td>
       <td>
          <a class="btn orange" href="/room/edit/{{ _id }}">Edit</a>
          <a class="btn brown" href="/room/delete/{{_id}}"

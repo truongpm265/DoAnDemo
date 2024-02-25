@@ -1,0 +1,23 @@
+<h1 class="container text-center">Room List</h1>
+
+
+<table class="table table-primary">
+   <tr>
+      <th>Room</th>
+      <th>Name</th>
+      <th>Check-In</th>
+      <th>Check-Out</th>
+      <th>Total Price</th>
+   </tr>
+   
+   {{#each reservations }}
+   
+   <tr>
+      <td>{{ this.room.roomNumber }}</td>
+      <td>{{ user.username }}</td>
+      <td>{{ formatDate this.checkInDate}}</td>
+      <td>{{ formatDate this.checkOutDate }}</td>
+      <td>{{ totalPrice }}VNĐ</td>
+   </tr>
+   {{/each}}
+</table>

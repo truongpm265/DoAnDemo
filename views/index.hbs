@@ -1,24 +1,7 @@
+<center>
+   <a href="/room">
+      <img src="https://th.bing.com/th/id/R.cdcb9771399207df561e6666db336cbb?rik=KDT%2b3qlCogwRXg&pid=ImgRaw&r=0" width="300" height="300">
+   </a>
+   <h1>Welcome back, {{ username }} !</h1>
+</center>
 
-<div class="container text-center">
-    <div class="card-group">
-        <div class="row">
-            {{#each roomList}}
-            <div class="col col-3 mt-3 mb-3">
-                <div class="card h-100  m-3">
-                    <a href="/room/detail/{{_id}}">
-                        <img class="card-img-top mt-4" src="{{image}}" width="300" height="300">
-                    </a>
-                    <div class="card-body">
-                        <h4 class="card-title text-success">{{name}}</h4>
-                        <h4 class="card-title text-success">{{typeRoom.name}}</h4>
-                        <p class="card-text text-danger">{{description}}</p>
-                        <h4 class="text-danger">Price: {{price}} $</h4>
-                        <a class="btn btn-primary" href="/reservation/add">Book Now</a>
-                    </div>
-                    
-                </div>
-            </div>
-            {{/each}}
-        </div>
-    </div>
-</div>

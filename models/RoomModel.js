@@ -2,6 +2,10 @@ var mongoose = require('mongoose');
 
 var RoomSchema = mongoose.Schema(
     {
+        roomNumber:{
+            type: String,
+            require: true,
+        },
         name: {
             type: String,
             require: true,
@@ -10,18 +14,16 @@ var RoomSchema = mongoose.Schema(
             type: mongoose.SchemaTypes.ObjectId,
             ref: 'typerooms'  //"categories"  : name of reference collection
         },
-        price:{
-            type: Number,
-            min: [0, 'price can not be negative']
-        },
-        quantity:{
-            type: Number,
-        },
         description: {
             type: String,
         },
-        image: {
-            type: String,
+        image:[],
+        availability: {
+            type: Boolean,
+            default: true,
+        },
+        pricePerNight:{
+            type: Number,
         }
     }
 )

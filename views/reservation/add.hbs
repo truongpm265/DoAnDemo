@@ -51,23 +51,17 @@
 
 <!-- HTML form for reservation -->
 <form id="reservationForm" method="post">
-    <label for="roomId">Your Room:</label>
-    <select name="roomId" id="">
+    <label for="rooms">Your Room:</label>
+    <select name="rooms" id="">
         {{#each roomList }}
         <option value="{{_id}}">
-            {{ name }}
+            Room {{roomNumber}} - ${{pricePerNight}} PerNight
         </option>
         {{/each}}
     </select>
 
-    <label for="userId">Your Name:</label>
-    <select name="userId" id="">
-        {{#each typeRoomList }}
-        <option value="{{_id}}">
-            {{ name }}
-        </option>
-        {{/each}}
-    </select>
+    <label for="users">Your Name:</label>
+    <input type="String" id="users"  value="{{userId}}">
 
     <label for="checkInDate">Check-In Date:</label>
     <input type="date" id="checkInDate" name="checkInDate" required>

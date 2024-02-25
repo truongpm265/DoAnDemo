@@ -2,11 +2,11 @@ var mongoose = require('mongoose');
 
 var ReservationSchema = mongoose.Schema(
     {
-        roomId: {        
+        room: {        
             type: mongoose.SchemaTypes.ObjectId,
             ref: 'rooms' 
         },
-        userId: {          
+        user: {          
             type: mongoose.SchemaTypes.ObjectId,
             ref: 'users' 
         },
@@ -17,7 +17,7 @@ var ReservationSchema = mongoose.Schema(
             type: Date,
         },
         totalPrice: {
-            type: Number,
+            type: String,
         },
     }
 )

@@ -6,8 +6,11 @@ var TypeRoomModel = require('../models/TypeRoomModel');
 
 router.get('/',async (req, res) => {
    var roomList = await RoomModel.find({}).populate('typeRoom');
-      res.render('index', { roomList })
-
+      res.render('index123', { roomList })
+});
+router.get('/user/',async (req, res) => {
+   var roomList = await RoomModel.find({}).populate('typeRoom');
+      res.render('index123', { layout: 'user_layout',roomList  },)
 });
 router.get('/room', async(req,res)=>{
    var roomList = await RoomModel.find({}).populate('typeRoom');
@@ -44,7 +47,7 @@ router.get('/delete/:id', async (req, res) => {
 router.get('/detail/:id', async(req, res) => {
    var id = req.params.id;
    var typeRoomList = await TypeRoomModel.find({});
-   var room = await RoomModel.findById(id);
-   res.render('room/info', { typeRoomList, room });
+   var room = await RoomModel.findById(id).populate('typeRoom');
+   res.render('room/info', { typeRoomList, room, layout: 'user_layout'});
 });
 module.exports = router;

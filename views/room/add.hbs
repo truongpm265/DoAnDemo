@@ -2,6 +2,8 @@
   <h1 class="">Add new room</h1>
   Name: <input type="text" name="name" id="" required>
   <br><br>
+  Number: <input type="text" name="roomNumber" id="" required>
+  <br><br>
   Type Room: 
   <select name="typeRoom" id="">
     {{#each typeRoomList }}
@@ -11,11 +13,14 @@
     {{/each}}
   </select>
   <br><br>
-  Price: <input type="number" name="price" id="" required min="0">
-  <br><br>
-  Quantity: <input type="number" name="quantity" id="" required min="0">
-  <br><br>
   Description: <input type="text" name="description" id="" required min="0">
+  <br><br>
+  Price: <input type="text" name="pricePerNight" required min="0">
+  <br><br>
+  Available: 
+  <label>
+    <input type="checkbox" name="availability" value="false"> False
+  </label>
   <br><br>
   Image: <input type="url" name="image" id="" required>
   <br><br>
