@@ -103,6 +103,87 @@ router.post('/add', async (req, res) => {
     await reservation.save();
     res.redirect('/reservation');
 });
+router.get('/confirmReservation', function (req, res, next) {
+    // Render the confirmation page with the reservation data
+    const rooms = RoomModel.find({});
+    res.render('reservation/confirmReservation', {
+        title: 'Confirm Reservation',
+        reservation: req.session.reservation,rooms // Assuming the reservation data is stored in the session
+    });
+});
+router.post('/confirmReservation', async function (req, res, next) {
+    // Save reservation
+    const reservation = new ReservationModel(req.session.reservation);
+    await reservation.save();
+
+    // Clear reservation from session
+    delete req.session.reservation;
+
+    // Redirect to reservations page
+    res.redirect('/reservation');
+});
+router.get('/addReservation', async (req, res) => {
+    const userId = req.session.userId; // Assuming the user ID is stored in req.session.userId
+    const user = await UserModel.findById(userId);
+    const rooms = await RoomModel.find({});
+    res.render('reservation/addReservation', { rooms, user, layout: 'user_layout' });
+});
+router.post('/addReservation',
+    [
+        body('checkInDate')
+            .isDate().withMessage('Check-in date is not valid.')
+            .custom((value) => {
+                const checkInDate = new Date(value);
+                const today = new Date();
+                if (checkInDate < today) {
+                    throw new Error('Check-in date cannot be in the past.');
+                }
+                return true;
+            }),
+        body('checkOutDate').isDate().withMessage('Check-out date is not valid.')
+            .custom((value, { req }) => {
+                const checkOutDate = new Date(value);
+                const checkInDate = new Date(req.body.checkInDate);
+                if (checkOutDate < checkInDate) {
+                    throw new Error('Check-out date cannot be before Check-in date.');
+                }
+                return true;
+            }),
+
+    ], async function (req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            // There are errors. Render the form again with sanitized values/error messages.
+            const rooms = await RoomModel.find({});
+            res.render('reservation/addReservation', {
+                title: 'Add Reservation',
+                reservation: req.body,
+                rooms,
+                errors: errors.array()
+            });
+            return;
+        }
+        const user = await UserModel.findById(req.session.userId);
+        if (!user) {
+            res.render('reservation/addUser', {
+                title: 'Add Reservation',
+                reservation: req.body,
+                rooms,
+                errors: [{ msg: 'User does not exist.' }]
+            });
+            return;
+        }
+
+        // Data from form is valid. Store reservation in session and redirect to confirmation page.
+        req.session.reservation = {
+            room: req.body.roomId,
+            user: req.session.userId, // Use the user ID from the session
+            checkInDate: req.body.checkInDate,
+            checkOutDate: req.body.checkOutDate,
+        };
+        res.redirect('/reservation/confirmReservation');
+    });
+
 function calculateTotalPrice(pricePerNight, checkInDate, checkOutDate) {
     const startDate = new Date(checkInDate);
     const endDate = new Date(checkOutDate);
