@@ -9,7 +9,7 @@
             <h4 class="text-warning">Type: {{room.typeRoom.name}}</h4>
             <h4 class="text-warning">Description: {{room.description}}</h4>
             <h4 class="text-success">Price: {{room.pricePerNight}}VNĐ</h4>
-            <button class="btn btn-primary">Book Now</button>
+            <a class="btn btn-primary" href="/reservation/add?roomId={{room._id}}">Book Now</a>
         </div>
     </div>
 </div>

@@ -85,17 +85,23 @@ router.post('/user/add', [
 
 
 router.get('/add', async (req, res) => {
-    var roomList = await RoomModel.find({});
-    res.render('reservation/add', { roomList });
+    roomId = req.query.roomId;
+    const room = await RoomModel.findById(roomId);
+    roomName = room.name;
+    roomPrice = room.pricePerNight;
+
+    res.render('reservation/add', { roomId, roomName,roomPrice});
 });
 router.post('/add', async (req, res) => {
-    const { rooms, customers, checkInDate, checkOutDate } = req.body;
-
-    const room = await RoomModel.findById(rooms);
-    var totalPrice = calculateTotalPrice(room.pricePerNight, checkInDate, checkOutDate);
+    const { checkInDate, checkOutDate } = req.body;
+    const roomId = req.query.roomId;
+    const userId = req.session.userId;
+    const room = await RoomModel.findById(roomId);
+    const pricePerNight = room.pricePerNight;
+    var totalPrice = calculateTotalPrice(pricePerNight, checkInDate, checkOutDate);
     const reservation = new ReservationModel({
-        room: rooms,
-        customer: customers,
+        room: roomId,
+        user: userId,
         checkInDate,
         checkOutDate,
         totalPrice,
@@ -123,10 +129,11 @@ router.post('/confirmReservation', async function (req, res, next) {
     res.redirect('/reservation');
 });
 router.get('/addReservation', async (req, res) => {
+    const roomId = req.query.roomId;
     const userId = req.session.userId; // Assuming the user ID is stored in req.session.userId
     const user = await UserModel.findById(userId);
     const rooms = await RoomModel.find({});
-    res.render('reservation/addReservation', { rooms, user, layout: 'user_layout' });
+    res.render('reservation/addReservation', { rooms, user,roomId, layout: 'user_layout' });
 });
 router.post('/addReservation',
     [
@@ -174,7 +181,7 @@ router.post('/addReservation',
             return;
         }
         req.session.reservation = {
-            room: req.body.roomId,
+            room: req.query.roomId,
             user: req.session.userId, 
             checkInDate: req.body.checkInDate,
             checkOutDate: req.body.checkOutDate,
