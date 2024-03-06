@@ -4,7 +4,6 @@ var RoomModel = require('../models/RoomModel');
 var TypeRoomModel = require('../models/TypeRoomModel');
 var ReservationModel = require('../models/ReservationModel');
 const checkLoginSession = require('../middlewares/auth');
-const CustomerModel = require('../models/CustomerModel');
 const UserModel = require('../models/UserModel');
 const { body, validationResult } = require('express-validator');
 
