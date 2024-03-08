@@ -8,11 +8,11 @@ const UserModel = require('../models/UserModel');
 const { body, validationResult } = require('express-validator');
 
 
-router.get('/',checkLoginSession, async (req, res) => {
+router.get('/', checkLoginSession, async (req, res) => {
     var reservationList = await ReservationModel.find({}).populate('room').populate('user');
     res.render('reservation/index', { reservationList })
 });
-router.get('/user',checkLoginSession, async (req, res) => {
+router.get('/user', checkLoginSession, async (req, res) => {
     const reservations = await ReservationModel.find({ user: req.session.userId }).populate('room').populate('user');
     res.render('reservation/indexUser', { reservations, layout: 'user_layout' });
 });
@@ -89,7 +89,7 @@ router.get('/add', async (req, res) => {
     roomName = room.name;
     roomPrice = room.pricePerNight;
 
-    res.render('reservation/add', { roomId, roomName,roomPrice});
+    res.render('reservation/add', { roomId, roomName, roomPrice });
 });
 router.post('/add', async (req, res) => {
     const { checkInDate, checkOutDate } = req.body;
@@ -108,31 +108,16 @@ router.post('/add', async (req, res) => {
     await reservation.save();
     res.redirect('/reservation');
 });
-router.get('/confirmReservation', function (req, res, next) {
-    // Render the confirmation page with the reservation data
-    const rooms = RoomModel.find({});
-    res.render('reservation/confirmReservation', {
-        title: 'Confirm Reservation',
-        reservation: req.session.reservation,rooms // Assuming the reservation data is stored in the session
-    });
-});
-router.post('/confirmReservation', async function (req, res, next) {
-    // Save reservation
-    const reservation = new ReservationModel(req.session.reservation);
-    await reservation.save();
-
-    // Clear reservation from session
-    delete req.session.reservation;
-
-    // Redirect to reservations page
-    res.redirect('/reservation');
-});
 router.get('/addReservation', async (req, res) => {
+    roomId = req.query.roomId;
+    const room = await RoomModel.findById(roomId);
+    roomName = room.name;
+    roomPrice = room.pricePerNight;
     const roomId = req.query.roomId;
     const userId = req.session.userId; // Assuming the user ID is stored in req.session.userId
     const user = await UserModel.findById(userId);
     const rooms = await RoomModel.find({});
-    res.render('reservation/addReservation', { rooms, user,roomId, layout: 'user_layout' });
+    res.render('reservation/addReservation', { rooms, user, roomId, roomPrice, layout: 'user_layout' });
 });
 router.post('/addReservation',
     [
@@ -179,14 +164,40 @@ router.post('/addReservation',
             });
             return;
         }
+        const roomId = req.query.roomId;
+        const room = await RoomModel.findById(roomId);
+        const pricePerNight = room.pricePerNight;
+        var totalPrice = calculateTotalPrice(pricePerNight, checkInDate, checkOutDate);
         req.session.reservation = {
-            room: req.query.roomId,
-            user: req.session.userId, 
+            room: roomId,
+            user: req.session.userId,
             checkInDate: req.body.checkInDate,
             checkOutDate: req.body.checkOutDate,
+            totalPrice: totalPrice,
         };
         res.redirect('/reservation/confirmReservation');
     });
+router.get('/confirmReservation', function (req, res, next) {
+    // Render the confirmation page with the reservation data
+
+    res.render('reservation/confirmReservation', {
+        title: 'Confirm Reservation',
+        reservation: req.session.reservation, // Assuming the reservation data is stored in the session
+    });
+});
+router.post('/confirmReservation', async function (req, res, next) {
+    // Save reservation
+    const reservation = new ReservationModel(req.session.reservation);
+    await reservation.save();
+
+    // Clear reservation from session
+    delete req.session.reservation;
+
+    // Redirect to reservations page
+    res.redirect('/reservation');
+});
+
+
 
 function calculateTotalPrice(pricePerNight, checkInDate, checkOutDate) {
     const startDate = new Date(checkInDate);

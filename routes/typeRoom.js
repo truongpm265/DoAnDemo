@@ -6,7 +6,7 @@ const RoomModel = require('../models/RoomModel');
 
 router.get('/', async(req,res)=>{
    var typeRoomList = await TypeRoomModel.find({});
-   res.render('typeRoom/index', { typeRoomList })
+   res.render('typeRoom/index', { typeRoomList, })
 });
 
 router.get('/add', async(req, res)=>{

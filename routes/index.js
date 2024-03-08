@@ -12,7 +12,7 @@ router.get('/', async function (req, res) {
 });
 
 router.get('/admin', (req, res) => {
-  res.render('admin');
+  res.render('admin',{ layout: 'admin_layout' });
 })
 
 router.get('/user', (req, res) => {

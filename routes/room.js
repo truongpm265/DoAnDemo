@@ -14,7 +14,7 @@ router.get('/user/',async (req, res) => {
 });
 router.get('/room', async(req,res)=>{
    var roomList = await RoomModel.find({}).populate('typeRoom');
-   res.render('room/index', { roomList });
+   res.render('room/index', { roomList, layout: 'admin_layout'});
 });
 
 router.get('/add', async(req, res)=>{
