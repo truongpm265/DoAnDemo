@@ -89,24 +89,78 @@ router.get('/add', async (req, res) => {
     roomName = room.name;
     roomPrice = room.pricePerNight;
 
-    res.render('reservation/add', { roomId, roomName, roomPrice });
+    res.render('reservation/addReservation', { roomId, roomName, roomPrice });
 });
-router.post('/add', async (req, res) => {
+router.post('/add',
+[
+    body('checkInDate')
+        .isDate().withMessage('Check-in date is not valid.')
+        .custom((value) => {
+            const checkInDate = new Date(value);
+            const today = new Date();
+            if (checkInDate < today) {
+                throw new Error('Check-in date cannot be in the past.');
+            }
+            return true;
+        }),
+    body('checkOutDate').isDate().withMessage('Check-out date is not valid.')
+        .custom((value, { req }) => {
+            const checkOutDate = new Date(value);
+            const checkInDate = new Date(req.body.checkInDate);
+            if (checkOutDate < checkInDate) {
+                throw new Error('Check-out date cannot be before Check-in date.');
+            }
+            return true;
+        }),
+
+], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        // There are errors. Render the form again with sanitized values/error messages.
+        const roomId = req.query.roomId;
+        const room = await RoomModel.findById(roomId);
+        const roomName = room.name;
+        const roomPrice = room.pricePerNight;
+        
+        res.render('reservation/addReservation', {
+            title: 'Add Reservation',
+            reservation: req.body,
+            rooms: room,
+            roomName: roomName,
+            roomPrice: roomPrice,
+            errors: errors.array()
+        });
+        return;
+    }
+    const user = await UserModel.findById(req.session.userId);
+    if (!user) {
+        res.render('reservation/addUser', {
+            title: 'Add Reservation',
+            reservation: req.body,
+            rooms,
+            errors: [{ msg: 'User does not exist.' }]
+        });
+        return;
+    }
+    
     const { checkInDate, checkOutDate } = req.body;
     const roomId = req.query.roomId;
     const userId = req.session.userId;
     const room = await RoomModel.findById(roomId);
+    roomName = room.name;
+    roomPrice = room.pricePerNight;
     const pricePerNight = room.pricePerNight;
     var totalPrice = calculateTotalPrice(pricePerNight, checkInDate, checkOutDate);
-    const reservation = new ReservationModel({
+    req.session.reservation = {
         room: roomId,
         user: userId,
-        checkInDate,
-        checkOutDate,
-        totalPrice,
-    });
-    await reservation.save();
-    res.redirect('/reservation');
+        checkInDate: req.body.checkInDate,
+        checkOutDate: req.body.checkOutDate,
+        totalPrice: totalPrice,
+    };
+    // await reservation.save();
+    res.redirect('/reservation/confirmReservation');
+    
 });
 router.get('/addReservation', async (req, res) => {
     roomId = req.query.roomId;

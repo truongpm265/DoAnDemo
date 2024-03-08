@@ -11,6 +11,11 @@ router.get('/', async function (req, res) {
       res.render ('userHome', { layout: 'user_layout',roomList  });
 });
 
+router.get('/test', async function (req, res) {
+  var roomList = await RoomModel.find({}).populate('typeRoom');
+      res.render ('HomePage', { layout: 'template_layout',roomList  });
+});
+
 router.get('/admin', (req, res) => {
   res.render('admin',{ layout: 'admin_layout' });
 })
@@ -40,15 +45,15 @@ router.post('/contact', async function(req, res, next) {
       service: 'gmail',
       auth: {
         user: 'truongsot@gmail.com',
-        pass: '0mothaiba'
+        pass: 'wfffzkwtkxbhamhc',
       }
     });
 
     const mailOptions = {
-      from: 'truongsot@gmail.com',
+      from:'truongsot@gmail.com',
       to: req.body.email,
-      subject: 'New Contact Form Submission',
-      text: `Name: ${req.body.name}\nEmail: ${req.body.email}\nPhone: ${req.body.numberphone}\nMessage: ${req.body.message}`
+      subject: 'Bee House - Contact Us',
+      text: `Thanks ${req.body.name} for contact for Bee House with message: ${req.body.message}.\n We will contact you as soon as possible via phone number: ${req.body.numberphone}`
     };
 
     transporter.sendMail(mailOptions, function(error, info){
@@ -63,23 +68,8 @@ router.post('/contact', async function(req, res, next) {
     console.error('Could not save contact', err);
   }
 
-  res.redirect('/room/user');
+  res.redirect('/test');
 });
 
-router.post('/contact', async function(req, res, next) {
-  const contact = new ContactModel({
-    name: req.body.name,
-    email: req.body.email,
-    numberphone: req.body.numberphone,
-    message: req.body.message
-  });
-  try {
-    await contact.save();
-    console.log('Contact saved');
-  } catch (err) {
-    console.error('Could not save contact', err);
-  }
 
-  res.redirect('/room/user');
-});
 module.exports = router;

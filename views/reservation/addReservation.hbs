@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            display: flex;
+            display:flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -18,6 +18,8 @@
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 8px;
+            margin: auto; /* Add this line to center the form */
+            margin-bottom: 50px;
         }
 
         select, input {
@@ -48,27 +50,15 @@
     <title>Reservation Form</title>
 </head>
 <body class="m-5">
-
-<!-- HTML form for reservation -->
-<form id="reservationForm" method="post">
-    <label for="rooms">Your Room:</label>
-    <select name="rooms" id="" required>
-        {{#each rooms }}
-        <option value="{{_id}}">
-            Room {{roomNumber}} - ${{pricePerNight}} PerNight
-        </option>
-        {{/each}}
-    </select>
-
-    <label for="checkInDate">Check-In Date:</label>
-    <input type="date" id="checkInDate" name="checkInDate" required>
-
-    <label for="checkOutDate">Check-Out Date:</label>
-    <input type="date" id="checkOutDate" name="checkOutDate" required>
-
-    <input class="btn" type="submit" value="Add">
-    <a class="btn" href="/room">Cancel</a>
-</form>
+    <form id="reservationForm" method="post">
+        <h4 for="rooms">Your Room: {{roomName}} - {{roomPrice}} VNĐ/Night</h1>
+        <label for="checkInDate">Check-In Date:</label>
+        <input type="date" id="checkInDate" name="checkInDate" required>
+        <label for="checkOutDate">Check-Out Date:</label>
+        <input type="date" id="checkOutDate" name="checkOutDate" required>
+        <input class="btn" type="submit" value="Add">
+        <a class="btn" href="/room">Cancel</a>
+    </form>
 {{#each errors}}
 <p class="error">{{this.msg}}</p>
 {{/each}}
