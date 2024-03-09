@@ -10,7 +10,7 @@ const { body, validationResult } = require('express-validator');
 
 router.get('/', checkLoginSession, async (req, res) => {
     var reservationList = await ReservationModel.find({}).populate('room').populate('user');
-    res.render('reservation/index', { reservationList })
+    res.render('dashboard', { reservationList })
 });
 router.get('/user', checkLoginSession, async (req, res) => {
     const reservations = await ReservationModel.find({ user: req.session.userId }).populate('room').populate('user');
