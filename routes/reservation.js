@@ -248,7 +248,7 @@ router.post('/confirmReservation', async function (req, res, next) {
     delete req.session.reservation;
 
     // Redirect to reservations page
-    res.redirect('/reservation');
+    res.redirect('/test');
 });
 
 

@@ -16,19 +16,14 @@ router.get('/test', async function (req, res) {
   var roomList = await RoomModel.find({}).populate('typeRoom');
       res.render ('HomePage', { layout: 'template_layout',roomList  });
 });
-router.get('/admin', checkLoginSession, async (req, res) => {
-  var reservationList = await ReservationModel.find({}).populate('room').populate('user');
-  var contactList = await ContactModel.find({});
-  var roomList = await RoomModel.find({}).populate('typeRoom');
-  res.render('dashboard', { reservationList,contactList,roomList, layout: 'template_layout' });
-});
-router.get('/admin/manageroom',async (req, res) => {
-  var roomList = await RoomModel.find({}).populate('typeRoom');
-     res.render('manageroom', { roomList, layout: 'template_layout' });
-});
-// router.get('/admin', (req, res) => {
-//   res.render('dashboard',{ layout: 'template_layout' });
-// })
+// router.get('/admin', checkLoginSession, async (req, res) => {
+//   var reservationList = await ReservationModel.find({}).populate('room').populate('user');
+//   var contactList = await ContactModel.find({});
+//   var roomList = await RoomModel.find({}).populate('typeRoom');
+//   res.render('dashboard', { reservationList,contactList,roomList, layout: 'template_layout' });
+// });
+
+
 
 router.get('/user', (req, res) => {
   res.render('user', { layout: 'user_layout' });

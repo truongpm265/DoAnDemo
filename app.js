@@ -11,7 +11,7 @@ var roomRouter = require('./routes/room');
 var typeRoomRouter = require('./routes/typeRoom');
 var reservationRouter = require('./routes/reservation');
 var authRouter = require('./routes/auth');
-
+var adminRouter = require('./routes/admin');
 
 
 
@@ -60,7 +60,7 @@ app.use('/room', roomRouter);
 app.use('/typeRoom',typeRoomRouter);
 app.use('/reservation',reservationRouter);
 app.use('/auth', authRouter);
-
+app.use('/admin',adminRouter);
 
 
 // catch 404 and forward to error handler
