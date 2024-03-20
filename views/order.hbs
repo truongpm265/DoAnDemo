@@ -4,22 +4,18 @@
     <br></br>
     <br></br>
     <br></br>
-    <label for="create_payment_url">Oder Type </label>
-    <input type="text" id="orderType" name="orderType" required>
 
+    <label for="amout">Amout:</label>
     <input type="text" name="amout" required
     placeholder="Enter typeRoom description"
     value="{{ reservation.totalPrice }}">
 
-    <label for="orderDescription">Description</label>
-    <input type="text" id="orderDescription" name="orderDescription"  required>
-
-    <label for="bankCode">BANKCODE</label>
+    <label for="bankCode">BANK CODE</label>
     <input type="text" id="bankCode" name="bankCode" value="NCB" required>
 
-    <label for="language">amout</label>
+    <label for="language">Language</label>
     <input type="text" id="language" name="language" value='vn' required>
 
-    <input class="btn" type="submit" value="Add">
+    <input class="btn" type="submit" value="Confirm">
     <a class="btn" href="/room">Cancel</a>
 </form>

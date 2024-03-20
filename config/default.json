@@ -1,6 +1,0 @@
-{
-  "vnp_TmnCode":"T9TJG1NH",
-  "vnp_HashSecret":"PVURTHUFKBJQLMHUVOVYNQSRPMXOXVXE",
-  "vnp_Url":"https://sandbox.vnpayment.vn/paymentv2/vpcpay.html",
-  "vnp_ReturnUrl": "http://localhost:3000/reservation/user"
-}

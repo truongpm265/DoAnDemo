@@ -10,7 +10,7 @@ router.get('/', checkLoginSession, async (req, res) => {
     var reservationList = await ReservationModel.find({}).populate('room').populate('user');
     var contactList = await ContactModel.find({});
     var roomList = await RoomModel.find({}).populate('typeRoom');
-    res.render('dashboard', { reservationList, contactList, roomList, layout: 'template_layout' });
+    res.render('admin/dashboard', { reservationList, contactList, roomList, layout: 'template_layout' });
 });
 router.get('/manageRoom', async (req, res) => {
     var roomList = await RoomModel.find({}).populate('typeRoom');
@@ -34,18 +34,22 @@ router.get('/confirm/:id', async (req, res) => {
     var checkOutDate = new Date(reservation.checkOutDate);
     if (today > checkOutDate) {
         await RoomModel.findByIdAndUpdate(reservation.room, { availability: true})
+    }else {
+        await RoomModel.findByIdAndUpdate(reservation.room, { availability: false})
     }
-    res.redirect('/admin/manageReservation');
+    res.redirect('/reservation/manageReservation');
  });
  router.get('/cancel/:id', async (req, res) => {
     var id = req.params.id;
     var status = "Cancel";
     await ReservationModel.findByIdAndUpdate(id, { status: status });
-    res.redirect('/admin/manageReservation');
+    var reservation = await ReservationModel.findById(id);
+    await RoomModel.findByIdAndUpdate(reservation.room, { availability: true})
+    res.redirect('/reservation/manageReservation');
  });
 router.get('/manageContact', checkLoginSession, async (req, res) => {
     var contactList = await ContactModel.find({});
-    res.render('contactList', { contactList, layout: 'template_layout' });
+    res.render('admin/contactList', { contactList, layout: 'template_layout' });
 });
 
 

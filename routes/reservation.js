@@ -199,16 +199,21 @@ router.post('/confirmReservation', async function (req, res, next) {
     await reservation.save();
 
     // Clear reservation from session
-    //delete req.session.reservation;
+        //delete req.session.reservation;
 
     // Redirect to reservations page
-    // res.redirect('/test');
+        // res.redirect('/test');
     res.redirect('/reservation/create_payment_url');
 });
-router.get('/create_payment_url', function (req, res, next) {
-    res.render('order', {reservation: req.session.reservation,layout: 'template_layout'})
+router.get('/create_payment_url', async function (req, res, next) {
+    roomId = req.session.reservation.room;
+    var room = await RoomModel.findById(roomId);
+    var roomName = room.name;
+    var roomPrice = room.pricePerNight;
+    var des = 'Thanh toan phong nghi ' + roomName + ' voi gia ' + req.session.reservation.totalPrice + ' VND';
+    res.render('order', {reservation: req.session.reservation,roomName,roomPrice,des,layout: 'template_layout'})
 });
-router.post('/create_payment_url', function (req, res, next) {
+router.post('/create_payment_url', async function (req, res, next) {
     var ipAddr = req.headers['x-forwarded-for'] ||
         req.connection.remoteAddress ||
         req.socket.remoteAddress ||
@@ -216,27 +221,30 @@ router.post('/create_payment_url', function (req, res, next) {
 
 
 
-    var config = require('config');
-    var dateFormat = require('dateformat');
+
+    const room = await RoomModel.findById(req.session.reservation.room);
+
     var tmnCode = 'T9TJG1NH';
     var secretKey = 'PVURTHUFKBJQLMHUVOVYNQSRPMXOXVXE';
     var vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
     var returnUrl = 'http://localhost:3000/reservation/user';
 
     var date = new Date();
+    var createDate =  dateFormat(date, 'yyyymmddHHmmss');
 
-    var createDate = dateFormat(date, 'yyyymmddHHmmss');
-    var orderId = dateFormat(date, 'HHmmss');
+    var orderId =  dateFormat(date, 'yyyymmddHHmmss');
 
     var amount = req.session.reservation.totalPrice;
     var bankCode = 	'NCB';
     
-    var orderInfo = 'Thanh toan phong nghi ' + req.session.reservation.room ;
-    var orderType = req.body.orderType;
+    var orderInfo = req.session.reservation.user + 'Thanh toan phong nghi ' + room.name + ' voi gia ' + req.session.reservation.totalPrice + ' VND';
+    var orderType = 'Thanh toan phong tai BeeHouse';
+
     var locale = req.body.language;
     if(locale === null || locale === ''){
         locale = 'vn';
     }
+
     var currCode = 'VND';
     var vnp_Params = {};
     vnp_Params['vnp_Version'] = '2.1.0';
@@ -291,6 +299,23 @@ function sortObject(obj) {
         sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
     }
     return sorted;
+}
+function dateFormat(date, format) {
+    var year = date.getFullYear();
+    var month = ("0" + (date.getMonth() + 1)).slice(-2);
+    var day = ("0" + date.getDate()).slice(-2);
+    var hours = ("0" + date.getHours()).slice(-2);
+    var minutes = ("0" + date.getMinutes()).slice(-2);
+    var seconds = ("0" + date.getSeconds()).slice(-2);
+
+    format = format.replace("yyyy", year);
+    format = format.replace("mm", month);
+    format = format.replace("dd", day);
+    format = format.replace("HH", hours);
+    format = format.replace("mm", minutes);
+    format = format.replace("ss", seconds);
+
+    return format;
 }
 
 module.exports = router;
