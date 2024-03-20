@@ -152,9 +152,7 @@
                                 <div class="col-md-6 stretch-card transparent">
                                     <div class="card card-light-danger">
                                         <div class="card-body">
-                                            <p class="mb-4">Number of Clients</p>
-                                            <p class="fs-30 mb-2">47033</p>
-                                            <p>0.22% (30 days)</p>
+                                            <p class="mb-4">Cancel Bookings</p>
                                         </div>
                                     </div>
                                 </div>
@@ -188,7 +186,13 @@
                                                     <td>{{ totalPrice }} VNĐ</td>
                                                     {{!-- <td class="font-weight-medium"><div class="badge badge-danger">Cancelled</div></td>
                                                     <td class="font-weight-medium"><div class="badge badge-warning">Pending</div></td> --}}
-                                                    <td class="font-weight-medium"><div class="badge badge-success">Completed</div></td>
+                                                    <td class="font-weight-medium">{{#if (eq status "Pending")}}
+                                                    <div class="badge badge-warning">Pending</div>
+                                                    {{else if (eq status "Confirm")}}
+                                                    <div class="badge badge-success">Confirm</div>
+                                                    {{else if (eq status "Cancel")}}
+                                                    <div class="badge badge-danger">Cancel</div>
+                                                    {{/if}}</div></td>
                                                 </tr>
                                                 {{/each}}
                                             </tbody>
@@ -230,7 +234,6 @@
     <!-- endinject -->
     <!-- Custom js for this page-->
     <script src="js/dashboard.js"></script>
-    <script src="js/Chart.roundedBarCharts.js"></script>
     <!-- End custom js for this page-->
 </body>
 

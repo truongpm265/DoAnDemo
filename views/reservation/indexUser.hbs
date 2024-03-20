@@ -8,6 +8,7 @@
       <th>Check-In</th>
       <th>Check-Out</th>
       <th>Total Price</th>
+      <th>Status</th>
    </tr>
    
    {{#each reservations }}
@@ -18,6 +19,7 @@
       <td>{{ formatDate this.checkInDate}}</td>
       <td>{{ formatDate this.checkOutDate }}</td>
       <td>{{ totalPrice }}VNĐ</td>
+      <td>{{ status}}</td>
    </tr>
    {{/each}}
 </table>

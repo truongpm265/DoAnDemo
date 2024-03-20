@@ -8,7 +8,7 @@ var salt = 8;                     //random value
 
 router.get('/register', (req, res) => {
    res.render('auth/register', { layout: 'auth_layout' })
-})
+});
 
 router.post('/register', async (req, res) => {
    try {
@@ -60,6 +60,6 @@ router.post('/login', async (req, res) => {
 router.get('/logout', (req, res) => {
    req.session.destroy();
    res.redirect("/auth/login");
-})
+});
 
 module.exports = router

@@ -19,6 +19,9 @@ var ReservationSchema = mongoose.Schema(
         totalPrice: {
             type: String,
         },
+        status: {
+            type: String,
+        },
     }
 )
 var ReservationModel = mongoose.model("reservations", ReservationSchema);

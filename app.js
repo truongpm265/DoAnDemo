@@ -12,6 +12,7 @@ var typeRoomRouter = require('./routes/typeRoom');
 var reservationRouter = require('./routes/reservation');
 var authRouter = require('./routes/auth');
 var adminRouter = require('./routes/admin');
+var paymentRouter = require('./routes/payment');
 
 
 
@@ -61,6 +62,7 @@ app.use('/typeRoom',typeRoomRouter);
 app.use('/reservation',reservationRouter);
 app.use('/auth', authRouter);
 app.use('/admin',adminRouter);
+app.use('/payment', paymentRouter);
 
 
 // catch 404 and forward to error handler
@@ -83,6 +85,8 @@ app.use(function(err, req, res, next) {
 hbs.registerHelper('formatDate', function(date) {
   return new Date(date).toLocaleDateString('en-GB');
 });
-
+hbs.registerHelper('eq', function(a,b) {
+  return a === b;
+});
 
 module.exports = app;

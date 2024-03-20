@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var RoomModel = require('../models/RoomModel');
+
 var TypeRoomModel = require('../models/TypeRoomModel');
 var ReservationModel = require('../models/ReservationModel');
 const checkLoginSession = require('../middlewares/auth');
@@ -77,6 +78,7 @@ router.post('/user/add', [
         checkInDate,
         checkOutDate,
         totalPrice,
+        status: "Pending",
     });
     await reservation.save();
     res.redirect('/reservation/user');
@@ -93,6 +95,17 @@ router.get('/add', async (req, res) => {
 });
 router.post('/add',
 [
+
+    body('roomId').custom(async() => {
+        const room = await RoomModel.findById(roomId);
+        if (!room) {
+            throw new Error('Room does not exist.');
+        }
+        if (!room.availability) {
+            throw new Error('Room is not available.');
+        }
+        return true;
+    }),
     body('checkInDate')
         .isDate().withMessage('Check-in date is not valid.')
         .custom((value) => {
@@ -122,12 +135,14 @@ router.post('/add',
         const roomName = room.name;
         const roomPrice = room.pricePerNight;
         
+        
         res.render('reservation/addReservation', {
             title: 'Add Reservation',
             reservation: req.body,
             rooms: room,
             roomName: roomName,
             roomPrice: roomPrice,
+            status: "Pending",
             errors: errors.array()
         });
         return;
@@ -157,98 +172,101 @@ router.post('/add',
         checkInDate: req.body.checkInDate,
         checkOutDate: req.body.checkOutDate,
         totalPrice: totalPrice,
+        status: "Pending",
     };
     // await reservation.save();
     res.redirect('/reservation/confirmReservation');
     
 });
-router.get('/addReservation', async (req, res) => {
-    roomId = req.query.roomId;
-    const room = await RoomModel.findById(roomId);
-    roomName = room.name;
-    roomPrice = room.pricePerNight;
-    const roomId = req.query.roomId;
-    const userId = req.session.userId; // Assuming the user ID is stored in req.session.userId
-    const user = await UserModel.findById(userId);
-    const rooms = await RoomModel.find({});
-    res.render('reservation/addReservation', { rooms, user, roomId, roomPrice, layout: 'user_layout' });
-});
-router.post('/addReservation',
-    [
-        body('checkInDate')
-            .isDate().withMessage('Check-in date is not valid.')
-            .custom((value) => {
-                const checkInDate = new Date(value);
-                const today = new Date();
-                if (checkInDate < today) {
-                    throw new Error('Check-in date cannot be in the past.');
-                }
-                return true;
-            }),
-        body('checkOutDate').isDate().withMessage('Check-out date is not valid.')
-            .custom((value, { req }) => {
-                const checkOutDate = new Date(value);
-                const checkInDate = new Date(req.body.checkInDate);
-                if (checkOutDate < checkInDate) {
-                    throw new Error('Check-out date cannot be before Check-in date.');
-                }
-                return true;
-            }),
 
-    ], async function (req, res, next) {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            // There are errors. Render the form again with sanitized values/error messages.
-            const rooms = await RoomModel.find({});
-            res.render('reservation/addReservation', {
-                title: 'Add Reservation',
-                reservation: req.body,
-                rooms,
-                errors: errors.array()
-            });
-            return;
-        }
-        const user = await UserModel.findById(req.session.userId);
-        if (!user) {
-            res.render('reservation/addUser', {
-                title: 'Add Reservation',
-                reservation: req.body,
-                rooms,
-                errors: [{ msg: 'User does not exist.' }]
-            });
-            return;
-        }
-        const roomId = req.query.roomId;
-        const room = await RoomModel.findById(roomId);
-        const pricePerNight = room.pricePerNight;
-        var totalPrice = calculateTotalPrice(pricePerNight, checkInDate, checkOutDate);
-        req.session.reservation = {
-            room: roomId,
-            user: req.session.userId,
-            checkInDate: req.body.checkInDate,
-            checkOutDate: req.body.checkOutDate,
-            totalPrice: totalPrice,
-        };
-        res.redirect('/reservation/confirmReservation');
-    });
-router.get('/confirmReservation', function (req, res, next) {
+
+router.get('/confirmReservation', async function (req, res, next) {
     // Render the confirmation page with the reservation data
-
+   
     res.render('reservation/confirmReservation', {
         title: 'Confirm Reservation',
         reservation: req.session.reservation, // Assuming the reservation data is stored in the session
     });
 });
 router.post('/confirmReservation', async function (req, res, next) {
+    // Update room availability
+    const roomId = req.session.reservation.room;
+    const room = await RoomModel.findById(roomId);
+    room.availability = false;
+    await room.save();
     // Save reservation
     const reservation = new ReservationModel(req.session.reservation);
     await reservation.save();
 
     // Clear reservation from session
-    delete req.session.reservation;
+    //delete req.session.reservation;
 
     // Redirect to reservations page
-    res.redirect('/test');
+    // res.redirect('/test');
+    res.redirect('/reservation/create_payment_url');
+});
+router.get('/create_payment_url', function (req, res, next) {
+    res.render('order', {reservation: req.session.reservation,layout: 'template_layout'})
+});
+router.post('/create_payment_url', function (req, res, next) {
+    var ipAddr = req.headers['x-forwarded-for'] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
+
+
+
+    var config = require('config');
+    var dateFormat = require('dateformat');
+    var tmnCode = 'T9TJG1NH';
+    var secretKey = 'PVURTHUFKBJQLMHUVOVYNQSRPMXOXVXE';
+    var vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
+    var returnUrl = 'http://localhost:3000/reservation/user';
+
+    var date = new Date();
+
+    var createDate = dateFormat(date, 'yyyymmddHHmmss');
+    var orderId = dateFormat(date, 'HHmmss');
+
+    var amount = req.session.reservation.totalPrice;
+    var bankCode = 	'NCB';
+    
+    var orderInfo = 'Thanh toan phong nghi ' + req.session.reservation.room ;
+    var orderType = req.body.orderType;
+    var locale = req.body.language;
+    if(locale === null || locale === ''){
+        locale = 'vn';
+    }
+    var currCode = 'VND';
+    var vnp_Params = {};
+    vnp_Params['vnp_Version'] = '2.1.0';
+    vnp_Params['vnp_Command'] = 'pay';
+    vnp_Params['vnp_TmnCode'] = tmnCode;
+    // vnp_Params['vnp_Merchant'] = ''
+    vnp_Params['vnp_Locale'] = locale;
+    vnp_Params['vnp_CurrCode'] = currCode;
+    vnp_Params['vnp_TxnRef'] = orderId;
+    vnp_Params['vnp_OrderInfo'] = orderInfo;
+    vnp_Params['vnp_OrderType'] = orderType;
+    vnp_Params['vnp_Amount'] = amount * 100;
+    vnp_Params['vnp_ReturnUrl'] = returnUrl;
+    vnp_Params['vnp_IpAddr'] = ipAddr;
+    vnp_Params['vnp_CreateDate'] = createDate;
+    if(bankCode !== null && bankCode !== ''){
+        vnp_Params['vnp_BankCode'] = bankCode;
+    }
+
+    vnp_Params = sortObject(vnp_Params);
+
+    var querystring = require('qs');
+    var signData = querystring.stringify(vnp_Params, { encode: false });
+    var crypto = require("crypto");     
+    var hmac = crypto.createHmac("sha512", secretKey);
+    var signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex"); 
+    vnp_Params['vnp_SecureHash'] = signed;
+    vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
+
+    res.redirect(vnpUrl)
 });
 
 
@@ -259,6 +277,20 @@ function calculateTotalPrice(pricePerNight, checkInDate, checkOutDate) {
     const nights = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)); //do kết quả của phép tính là sự khác nhau giữa 2 ngày tính bằng mili giây nên phải chia cho số mili giây 1 ngày
     return pricePerNight * nights;
 }
-
+function sortObject(obj) {
+	var sorted = {};
+	var str = [];
+	var key;
+	for (key in obj){
+		if (obj.hasOwnProperty(key)) {
+		str.push(encodeURIComponent(key));
+		}
+	}
+	str.sort();
+    for (key = 0; key < str.length; key++) {
+        sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
+    }
+    return sorted;
+}
 
 module.exports = router;

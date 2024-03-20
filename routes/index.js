@@ -16,14 +16,6 @@ router.get('/test', async function (req, res) {
   var roomList = await RoomModel.find({}).populate('typeRoom');
       res.render ('HomePage', { layout: 'template_layout',roomList  });
 });
-// router.get('/admin', checkLoginSession, async (req, res) => {
-//   var reservationList = await ReservationModel.find({}).populate('room').populate('user');
-//   var contactList = await ContactModel.find({});
-//   var roomList = await RoomModel.find({}).populate('typeRoom');
-//   res.render('dashboard', { reservationList,contactList,roomList, layout: 'template_layout' });
-// });
-
-
 
 router.get('/user', (req, res) => {
   res.render('user', { layout: 'user_layout' });
@@ -31,7 +23,7 @@ router.get('/user', (req, res) => {
 
 
 router.get('/contact', function (req, res, next) {
-  res.render('contact', { layout: 'user_layout' });
+  res.render('contact', { layout: 'test_layout' });
 });
 // ...
 
