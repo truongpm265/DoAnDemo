@@ -1,10 +1,12 @@
-<h1 style="color: blue;">Confirm Reservation</h1>
-
-<p>Room: {{reservation.room}}</p>
-<p>User: {{reservation.user}}</p>
-<p>Check-in Date: {{reservation.checkInDate}}</p>
-<p>Check-out Date: {{reservation.checkOutDate}}</p>
-<p>Total Price: {{reservation.totalPrice}}</p>
-<form action="/reservation/confirmReservation" method="post">
-  <button type="submit">Confirm Reservation</button>
-</form>
+<div class="portfolio-description">
+  <form action="/reservation/confirmReservation" method="post">
+      <h1 class="text-center" style="color: blue;">Confirm Reservation</h1>
+      <p>Room: {{reservation.room}}</p>
+      <p>User: {{reservation.user}}</p>
+      <p>Check-in Date: {{reservation.checkInDate}}</p>
+      <p>Check-out Date: {{reservation.checkOutDate}}</p>
+      <p>Total Price: {{reservation.totalPrice}}</p>
+      <input class="btn btn-success" type="submit" value="Go to payment page">
+      <a class="btn btn-danger" href="/room">Cancel</a>
+  </form>
+</div>

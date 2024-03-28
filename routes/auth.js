@@ -45,7 +45,7 @@ router.post('/login', async (req, res) => {
                res.redirect('/admin');
             }
             else {
-               res.redirect('/user');
+               res.redirect('/');
             }
          }
          else {

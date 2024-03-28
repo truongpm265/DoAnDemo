@@ -1,14 +1,17 @@
-<form action="" method="post">
-   <h1>Edit Type Room</h1>
-   <input type="text" name="name" required
-   placeholder="Enter typeRoom name"
-   value="{{ typeRoom.name }}">
-   <br><br>
-   <input type="text" name="description" required
-   placeholder="Enter typeRoom description"
-   value="{{ typeRoom.description }}">
-   <br><br>
-   <input class="btn btn-success" type="submit" value="Edit">
-   <a class="btn btn-warning" href="/typeRoom">Cancel</a>
-</form>
-
+<div class="card container bg-secondary m-3 ml-auto mr-auto" style="max-width: 800px;" content="width=device-width, initial-scale=1.0">
+  <div class="card-body">
+    <h1 class="card-title text-center my-custom-class">Add new type room</h1>
+    <form class="forms-sample" method="post">
+      <div class="form-group">
+        <label for="typeRoomName">Name</label>
+        <input type="text" class="form-control" name="name" id="" required placeholder="Type Room name" value="{{ typeRoom.name }}">
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" class="form-control" name="description" id="" required placeholder="Description"value="{{ typeRoom.description }}">
+      </div>
+      <input class="btn btn-primary mr-2" type="submit" value="Add">
+      <a class="btn btn-light" href="/admin/manageTypeRoom">Cancel</a>
+    </form>
+  </div>
+</div>

@@ -10,7 +10,7 @@ router.get('/', async(req,res)=>{
 });
 
 router.get('/add', async(req, res)=>{
-   res.render('typeRoom/add');
+   res.render('typeRoom/add', { layout: 'admin_layout' });
 });
 router.post('/add', async(req,res) =>{
       var typeRoom = req.body;
@@ -21,7 +21,7 @@ router.post('/add', async(req,res) =>{
 router.get('/edit/:id', async(req,res)=>{
    var id = req.params.id;
    var typeRoom = await TypeRoomModel.findById(id);
-   res.render('typeRoom/edit', { typeRoom });
+   res.render('typeRoom/edit', { typeRoom , layout: 'admin_layout'});
 });
 router.post('/edit/:id', async (req, res) => {
     var id = req.params.id;
@@ -33,7 +33,7 @@ router.post('/edit/:id', async (req, res) => {
  router.get('/detail/:id', async (req, res) => {
     var id = req.params.id;
     var roomList = await RoomModel.find({ typeRoom: id }).populate('typeRoom');
-    res.render('room/index', { roomList })
+    res.render('room/index', { roomList, layout: 'admin_layout' })
  });
  router.get('/delete/:id', async (req, res) => {
    var id = req.params.id;

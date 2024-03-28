@@ -90,8 +90,8 @@ router.get('/add', async (req, res) => {
     const room = await RoomModel.findById(roomId);
     roomName = room.name;
     roomPrice = room.pricePerNight;
-
-    res.render('reservation/addReservation', { roomId, roomName, roomPrice });
+    roomImage = room.image;
+    res.render('reservation/addReservation', { roomId, roomName, roomPrice,roomImage, layout: 'template_layout'});
 });
 router.post('/add',
 [
@@ -103,6 +103,12 @@ router.post('/add',
         }
         if (!room.availability) {
             throw new Error('Room is not available.');
+        }
+        return true;
+    }),
+    body('userId').custom((value, { req }) => {
+        if (!req.session.userId) {
+            throw new Error('No user logged in. Please login');
         }
         return true;
     }),
@@ -134,29 +140,23 @@ router.post('/add',
         const room = await RoomModel.findById(roomId);
         const roomName = room.name;
         const roomPrice = room.pricePerNight;
+        const roomImage = room.image;
         
         
         res.render('reservation/addReservation', {
             title: 'Add Reservation',
+            layout: 'template_layout',
             reservation: req.body,
             rooms: room,
             roomName: roomName,
             roomPrice: roomPrice,
+            roomImage: roomImage,
             status: "Pending",
             errors: errors.array()
         });
         return;
     }
-    const user = await UserModel.findById(req.session.userId);
-    if (!user) {
-        res.render('reservation/addUser', {
-            title: 'Add Reservation',
-            reservation: req.body,
-            rooms,
-            errors: [{ msg: 'User does not exist.' }]
-        });
-        return;
-    }
+    
     
     const { checkInDate, checkOutDate } = req.body;
     const roomId = req.query.roomId;
@@ -213,6 +213,7 @@ router.get('/create_payment_url', async function (req, res, next) {
     var des = 'Thanh toan phong nghi ' + roomName + ' voi gia ' + req.session.reservation.totalPrice + ' VND';
     res.render('order', {reservation: req.session.reservation,roomName,roomPrice,des,layout: 'template_layout'})
 });
+
 router.post('/create_payment_url', async function (req, res, next) {
     var ipAddr = req.headers['x-forwarded-for'] ||
         req.connection.remoteAddress ||
@@ -237,7 +238,7 @@ router.post('/create_payment_url', async function (req, res, next) {
     var amount = req.session.reservation.totalPrice;
     var bankCode = 	'NCB';
     
-    var orderInfo = req.session.reservation.user + 'Thanh toan phong nghi ' + room.name + ' voi gia ' + req.session.reservation.totalPrice + ' VND';
+    var orderInfo = req.session.reservation.user + ' Thanh toan phong nghi ' + room.name + ' voi gia ' + req.session.reservation.totalPrice + ' VND';
     var orderType = 'Thanh toan phong tai BeeHouse';
 
     var locale = req.body.language;
@@ -275,6 +276,7 @@ router.post('/create_payment_url', async function (req, res, next) {
     vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
 
     res.redirect(vnpUrl)
+    
 });
 
 

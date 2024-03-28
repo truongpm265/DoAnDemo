@@ -19,35 +19,35 @@ router.get('/room', async(req,res)=>{
 
 router.get('/add', async(req, res)=>{
    var typeRoomList = await TypeRoomModel.find({});
-   res.render('room/add', { typeRoomList });
+   res.render('room/add', { typeRoomList, layout: 'admin_layout'});
 });
 router.post('/add', async(req,res) =>{
       var room = req.body;
       await RoomModel.create(room);
-      res.redirect('/room');
+      res.redirect('/admin/manageRoom');
 });
 
 router.get('/edit/:id', async(req,res)=>{
    var id = req.params.id;
    var typeRoomList = await TypeRoomModel.find({});
    var room = await RoomModel.findById(id);
-   res.render('room/edit', { typeRoomList, room });
+   res.render('room/edit', { typeRoomList, room, layout: 'admin_layout'});
 });
 router.post('/edit/:id', async(req,res)=>{
    var id = req.params.id;
    var data = req.body;
    await RoomModel.findByIdAndUpdate(id, data);
-   res.redirect('/room');
+   res.redirect('/admin/manageRoom');
 });
 router.get('/delete/:id', async (req, res) => {
    var id = req.params.id;
    await RoomModel.findByIdAndDelete(id);
-   res.redirect('/room');
+   res.redirect('/admin/manageRoom');
 });
 router.get('/detail/:id', async(req, res) => {
    var id = req.params.id;
    var typeRoomList = await TypeRoomModel.find({});
    var room = await RoomModel.findById(id).populate('typeRoom');
-   res.render('room/info', { typeRoomList, room, layout: 'user_layout'});
+   res.render('room/info', { typeRoomList, room, layout: 'admin_layout'});
 });
 module.exports = router;

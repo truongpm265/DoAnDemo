@@ -1,0 +1,220 @@
+[{
+  "_id": {
+    "$oid": "65faf932ce756bb75675980c"
+  },
+  "room": {
+    "$oid": "65b260eabafcaca0c77090cf"
+  },
+  "user": {
+    "$oid": "65b679a8925a05dde4bd34f2"
+  },
+  "checkInDate": {
+    "$date": "2024-03-21T00:00:00.000Z"
+  },
+  "checkOutDate": {
+    "$date": "2024-03-22T00:00:00.000Z"
+  },
+  "totalPrice": "900000",
+  "status": "Confirm",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65faf98ace756bb75675981b"
+  },
+  "room": {
+    "$oid": "65b6344b6e9d5f8327c288af"
+  },
+  "user": {
+    "$oid": "65b679a8925a05dde4bd34f2"
+  },
+  "checkInDate": {
+    "$date": "2024-03-21T00:00:00.000Z"
+  },
+  "checkOutDate": {
+    "$date": "2024-03-22T00:00:00.000Z"
+  },
+  "totalPrice": "900000",
+  "status": "Cancel",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65fafafa91c25f20024157fc"
+  },
+  "room": {
+    "$oid": "65b64bc835787998206d63ac"
+  },
+  "user": {
+    "$oid": "65d75904982f9624f0191edc"
+  },
+  "checkInDate": {
+    "$date": "2024-03-21T00:00:00.000Z"
+  },
+  "checkOutDate": {
+    "$date": "2024-03-22T00:00:00.000Z"
+  },
+  "totalPrice": "700000",
+  "status": "Pending",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65fafc98e139ab03ce047eb5"
+  },
+  "room": {
+    "$oid": "65faf840ce756bb7567597e5"
+  },
+  "user": {
+    "$oid": "65d75904982f9624f0191edc"
+  },
+  "checkInDate": {
+    "$date": "2024-03-21T00:00:00.000Z"
+  },
+  "checkOutDate": {
+    "$date": "2024-03-22T00:00:00.000Z"
+  },
+  "totalPrice": "300000",
+  "status": "Pending",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65fb0854a94725d7f146687d"
+  },
+  "room": {
+    "$oid": "65b260eabafcaca0c77090cf"
+  },
+  "user": {
+    "$oid": "65b679a8925a05dde4bd34f2"
+  },
+  "checkInDate": {
+    "$date": "2024-03-21T00:00:00.000Z"
+  },
+  "checkOutDate": {
+    "$date": "2024-03-22T00:00:00.000Z"
+  },
+  "totalPrice": "900000",
+  "status": "Pending",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65fd69379fe958a8563b753d"
+  },
+  "room": {
+    "$oid": "65b260eabafcaca0c77090cf"
+  },
+  "user": {
+    "$oid": "65b6732873a47682de228738"
+  },
+  "checkInDate": {
+    "$date": "2024-03-23T00:00:00.000Z"
+  },
+  "checkOutDate": {
+    "$date": "2024-03-24T00:00:00.000Z"
+  },
+  "totalPrice": "900000",
+  "status": "Confirm",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65fd6dcade5670c42d5d44b5"
+  },
+  "room": {
+    "$oid": "65b6344b6e9d5f8327c288af"
+  },
+  "user": {
+    "$oid": "65b6732873a47682de228738"
+  },
+  "checkInDate": {
+    "$date": "2024-03-23T00:00:00.000Z"
+  },
+  "checkOutDate": {
+    "$date": "2024-03-24T00:00:00.000Z"
+  },
+  "totalPrice": "900000",
+  "status": "Cancel",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65fd72d585c1fde09994648e"
+  },
+  "room": {
+    "$oid": "65b260eabafcaca0c77090cf"
+  },
+  "user": {
+    "$oid": "65b679a8925a05dde4bd34f2"
+  },
+  "checkInDate": {
+    "$date": "2024-03-24T00:00:00.000Z"
+  },
+  "checkOutDate": {
+    "$date": "2024-03-25T00:00:00.000Z"
+  },
+  "totalPrice": "900000",
+  "status": "Cancel",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65fd755a08c76247381fe19e"
+  },
+  "room": {
+    "$oid": "65b260eabafcaca0c77090cf"
+  },
+  "user": {
+    "$oid": "65b679a8925a05dde4bd34f2"
+  },
+  "checkInDate": {
+    "$date": "2024-03-23T00:00:00.000Z"
+  },
+  "checkOutDate": {
+    "$date": "2024-03-24T00:00:00.000Z"
+  },
+  "totalPrice": "900000",
+  "status": "Cancel",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6601165639a9c9149fc2e5f3"
+  },
+  "room": {
+    "$oid": "65faf79dce756bb7567597c3"
+  },
+  "user": {
+    "$oid": "65d75904982f9624f0191edc"
+  },
+  "checkInDate": {
+    "$date": "2024-03-26T00:00:00.000Z"
+  },
+  "checkOutDate": {
+    "$date": "2024-03-27T00:00:00.000Z"
+  },
+  "totalPrice": "350000",
+  "status": "Cancel",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66011dc55fae7a365dd0d6f8"
+  },
+  "room": {
+    "$oid": "65d75a80b33d290ad44e4997"
+  },
+  "user": {
+    "$oid": "65b679a8925a05dde4bd34f2"
+  },
+  "checkInDate": {
+    "$date": "2024-03-26T00:00:00.000Z"
+  },
+  "checkOutDate": {
+    "$date": "2024-03-27T00:00:00.000Z"
+  },
+  "totalPrice": "300000",
+  "status": "Cancel",
+  "__v": 0
+}]

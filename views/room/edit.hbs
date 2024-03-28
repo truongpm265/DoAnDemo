@@ -1,35 +1,56 @@
-<form action="" method="post">
-  <h1>Edit Room</h1>
-  Name: <input type="text" name="name" required value="{{ room.name }}">
+<div class="card container bg-secondary m-3 ml-auto mr-auto" style="max-width: 800px;" content="width=device-width, initial-scale=1.0">
+  <div class="card-body">
+    <h1 class="card-title text-center my-custom-class">Edit room</h1>
+    <form class="forms-sample" method="post">
+      <div class="form-group">
+        <label for="roomName">Name</label>
+        <input type="text" class="form-control" name="name" id="" required placeholder="Name" value="{{ room.name }}">
+      </div>
+      <div class="form-group">
+        <label for="roomNumber">Name</label>
+        <input type="text" class="form-control" name="roomNumber" id="" required placeholder="Room Number" value="{{room.roomNumber}}">
+      </div>
+      <div class="form-group">
+        <label for="typeRoom">Type Room</label>
+        <select name="typeRoom" id="">
+          {{#each typeRoomList }}
+          <option value="{{_id}}">
+            {{ name }}
+          </option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="pricePerNight">Price</label>
+        <input type="text" class="form-control" name="pricePerNight" id="" required min="0"
+          placeholder="Price per night" value="{{ room.pricePerNight }}">
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" class="form-control" name="description" id="" required min="0" placeholder="Description" value="{{ room.description }}" >
+      </div>
+      <div class="form-group">
+        <label for="availability">Available</label>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="radio" name="availability" value="false" {{#if room.availability}} {{else}} checked {{/if}}>
+            False
+          </label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+           <input type="radio" name="availability" value="true" {{#if room.availability}} checked {{/if}}> True
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="image">Image</label>
+        <input type="url" class="form-control" name="image" id="" required placeholder="Image" value="{{ room.image }}">
+      </div>
+      <img src="{{ room.image }}" alt="" width="120" height="120">
   <br><br>
-  Number: <input type="text" name="roomNumber" id="" required value="{{room.roomNumber}}">
-  <br><br>
-  Type Room:
-  <select name="typeRoom" id="" value="{{room.typeRoom}}">
-    {{#each typeRoomList }}
-    <option value="{{_id}}">
-      {{ name }}
-    </option>
-    {{/each}}
-  </select>
-  <br><br>
-  Price: <input type="text" name="pricePerNight" required value="{{ room.pricePerNight }}">
-  <br><br>
-  Description: <input type="text" name="description" required min="0" value="{{ room.description }}">
-  <br><br>
-  Available:
-  <label>
-    <input type="radio" name="availability" value="false" {{#if room.availability}} {{else}} checked {{/if}}> False
-  </label>
-  <label>
-    <input type="radio" name="availability" value="true" {{#if room.availability}} checked {{/if}}> True
-  </label>
-  <br><br>
-  Image: <input type="url" name="image" required value="{{ room.image }}">
-  <br><br>
-
-  <img src="{{ room.image }}" alt="" width="120" height="120">
-  <br><br>
-  <input class="btn btn-success" type="submit" value="Edit">
-  <a class="btn btn-warning" href="/room">Cancel</a>
-</form>
+      <input class="btn btn-primary mr-2" type="submit" value="Add">
+      <a class="btn btn-light" href="/admin/manageRoom">Cancel</a>
+    </form>
+  </div>
+</div>

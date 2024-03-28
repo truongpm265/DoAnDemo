@@ -5,26 +5,28 @@ var RoomModel = require('../models/RoomModel');
 var TypeRoomModel = require('../models/TypeRoomModel');
 const ContactModel = require('../models/ContactModel');
 var ReservationModel = require('../models/ReservationModel');
+const checkAdminSession = require('../middlewares/auth');
 
-router.get('/', checkLoginSession, async (req, res) => {
+router.get('/', checkAdminSession, async (req, res) => {
     var reservationList = await ReservationModel.find({}).populate('room').populate('user');
     var contactList = await ContactModel.find({});
     var roomList = await RoomModel.find({}).populate('typeRoom');
-    res.render('admin/dashboard', { reservationList, contactList, roomList, layout: 'template_layout' });
+    res.render('admin/dashboard', { reservationList, contactList, roomList, layout: 'admin_layout' });
 });
-router.get('/manageRoom', async (req, res) => {
+router.get('/manageRoom',checkAdminSession, async (req, res) => {
     var roomList = await RoomModel.find({}).populate('typeRoom');
-    res.render('room/manageRoom', { roomList, layout: 'template_layout' });
-});
-router.get('/manageTypeRoom', async (req, res) => {
     var typeRoomList = await TypeRoomModel.find({});
-    res.render('typeRoom/manageTypeRoom', { typeRoomList, layout: 'template_layout' });
+    res.render('room/manageRoom', { roomList,typeRoomList, layout: 'admin_layout' });
 });
-router.get('/manageReservation', checkLoginSession, async (req, res) => {
+router.get('/manageTypeRoom', checkAdminSession, async (req, res) => {
+    var typeRoomList = await TypeRoomModel.find({});
+    res.render('typeRoom/manageTypeRoom', { typeRoomList, layout: 'admin_layout' });
+});
+router.get('/manageReservation', checkAdminSession, async (req, res) => {
     var reservationList = await ReservationModel.find({}).populate('room').populate('user');
-    res.render('reservation/manageReservation', { reservationList, layout: 'template_layout' });
+    res.render('reservation/manageReservation', { reservationList, layout: 'admin_layout' });
 });
-router.get('/confirm/:id', async (req, res) => {
+router.get('/confirm/:id', checkAdminSession, async (req, res) => {
     
     var id = req.params.id;
     var status = "Confirm";
@@ -37,17 +39,17 @@ router.get('/confirm/:id', async (req, res) => {
     }else {
         await RoomModel.findByIdAndUpdate(reservation.room, { availability: false})
     }
-    res.redirect('/reservation/manageReservation');
+    res.redirect('/admin/manageReservation');
  });
- router.get('/cancel/:id', async (req, res) => {
+ router.get('/cancel/:id', checkAdminSession, async (req, res) => {
     var id = req.params.id;
     var status = "Cancel";
     await ReservationModel.findByIdAndUpdate(id, { status: status });
     var reservation = await ReservationModel.findById(id);
     await RoomModel.findByIdAndUpdate(reservation.room, { availability: true})
-    res.redirect('/reservation/manageReservation');
+    res.redirect('/admin/manageReservation');
  });
-router.get('/manageContact', checkLoginSession, async (req, res) => {
+router.get('/manageContact', checkAdminSession, async (req, res) => {
     var contactList = await ContactModel.find({});
     res.render('admin/contactList', { contactList, layout: 'template_layout' });
 });

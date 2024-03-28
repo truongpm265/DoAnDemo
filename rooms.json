@@ -1,0 +1,120 @@
+[{
+  "_id": {
+    "$oid": "65b260eabafcaca0c77090cf"
+  },
+  "name": "Phòng VIP 1",
+  "typeRoom": {
+    "$oid": "65b26c87370cb7dc97025989"
+  },
+  "price": 300,
+  "description": "Phòng VIP 1 đẹp nhất",
+  "image": [
+    "https://th.bing.com/th/id/R.f4b374aeb0b22998953c1e78844750f5?rik=V5UgPHmvhGbWUA&pid=ImgRaw&r=0"
+  ],
+  "__v": 0,
+  "roomNumber": "101",
+  "pricePerNight": 900000,
+  "availability": true
+},
+{
+  "_id": {
+    "$oid": "65b6344b6e9d5f8327c288af"
+  },
+  "roomNumber": "102",
+  "name": "Phòng VIP 2",
+  "typeRoom": {
+    "$oid": "65b26c87370cb7dc97025989"
+  },
+  "description": "phòng vip dành cho người muốn trải nghiệm",
+  "image": [
+    "https://th.bing.com/th/id/R.e1546d4edfef16c34953cefc9b3c26b5?rik=56ZD0wvDNkfizA&riu=http%3a%2f%2fskift.com%2fwp-content%2fuploads%2f2014%2f08%2fDays-Inn-and-Suites-Altoona-King-Room.jpg&ehk=%2fV4udxLL8PKuz%2fxnIEbuEim9K0V0fhfsXUfkHb6%2fXcc%3d&risl=&pid=ImgRaw&r=0"
+  ],
+  "__v": 0,
+  "pricePerNight": 900000,
+  "availability": true
+},
+{
+  "_id": {
+    "$oid": "65b64bc835787998206d63ac"
+  },
+  "roomNumber": "201",
+  "name": "Single VIP 1",
+  "typeRoom": {
+    "$oid": "65b2715f0ac260b43df532f4"
+  },
+  "description": "Phòng đơn VIP",
+  "image": [
+    "https://s3-media0.fl.yelpcdn.com/bphoto/TsraoQAjqmiGKQWWWjRlHw/l.jpg"
+  ],
+  "availability": false,
+  "__v": 0,
+  "pricePerNight": 700000
+},
+{
+  "_id": {
+    "$oid": "65d75a80b33d290ad44e4997"
+  },
+  "roomNumber": "301",
+  "name": "Normal Room",
+  "typeRoom": {
+    "$oid": "65b2715b0ac260b43df532f1"
+  },
+  "description": "Phòng nghỉ gồm 1 giường Queen size",
+  "image": [
+    "https://th.bing.com/th/id/OIP.ftQ7-OpgNhLsEgD0fWGeYAAAAA?rs=1&pid=ImgDetMain"
+  ],
+  "availability": true,
+  "__v": 0,
+  "pricePerNight": 300000
+},
+{
+  "_id": {
+    "$oid": "65db4974a7352c2e2ab1297f"
+  },
+  "roomNumber": "401",
+  "name": "Phòng Đôi 1",
+  "typeRoom": {
+    "$oid": "65b534f99640f158771e313b"
+  },
+  "description": "Phòng gồm 2 giường Queen size",
+  "image": [
+    "https://th.bing.com/th/id/OIP.tZWEjlsFB7Ojq_Xun87hXAHaE8?rs=1&pid=ImgDetMain"
+  ],
+  "availability": false,
+  "pricePerNight": 500000,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65faf79dce756bb7567597c3"
+  },
+  "roomNumber": "501",
+  "name": "Phòng tập thể",
+  "typeRoom": {
+    "$oid": "65b634cbb8087fa97ab341ef"
+  },
+  "description": "Phòng tập thể cho nhóm người",
+  "image": [
+    "https://leadtour.vn/wp-content/uploads/2020/07/phong-tap-the-680x366.jpg"
+  ],
+  "availability": true,
+  "pricePerNight": 350000,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65faf840ce756bb7567597e5"
+  },
+  "roomNumber": "601",
+  "name": "Phòng Đơn 1",
+  "typeRoom": {
+    "$oid": "65b62874848977774d9b83df"
+  },
+  "description": "Gồm 1 giường Queen size",
+  "image": [
+    "https://diamondstarbentre.com/vnt_upload/gallery/09_2020/thumbs/(1000x1000)_crop__019.jpg"
+  ],
+  "availability": false,
+  "pricePerNight": 300000,
+  "__v": 0
+}]

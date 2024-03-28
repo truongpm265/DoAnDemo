@@ -1,0 +1,53 @@
+[{
+  "_id": {
+    "$oid": "65b26c87370cb7dc97025989"
+  },
+  "name": "VIP",
+  "description": "Phòng VIP dành cho khách hàng muốn trải nhiệm văn hóa vùng cao",
+  "pricePerNight": 20
+},
+{
+  "_id": {
+    "$oid": "65b2715b0ac260b43df532f1"
+  },
+  "name": "Normal",
+  "description": "Phòng dành cho khách hàng bình dân ",
+  "__v": 0,
+  "pricePerNight": 50
+},
+{
+  "_id": {
+    "$oid": "65b2715f0ac260b43df532f4"
+  },
+  "name": "Single VIP ROOM",
+  "description": "Phòng dành cho khách hàng muốn trải nhiệm văn hóa vùng cao nhưng ít người ",
+  "__v": 0,
+  "pricePerNight": 400
+},
+{
+  "_id": {
+    "$oid": "65b534f99640f158771e313b"
+  },
+  "name": "Double Room",
+  "description": "Phòng đôi gồm 2 giường Queen size ",
+  "__v": 0,
+  "pricePerNight": 100
+},
+{
+  "_id": {
+    "$oid": "65b62874848977774d9b83df"
+  },
+  "name": "Single Room",
+  "description": "Phòng đơn gồm 1 giường Queen size",
+  "__v": 0,
+  "pricePerNight": 250
+},
+{
+  "_id": {
+    "$oid": "65b634cbb8087fa97ab341ef"
+  },
+  "name": "Dormitory rooms",
+  "description": "Phòng dành cho nhóm đông người với kinh phí thấp phù hợp với học sinh sinh viên ",
+  "pricePerNight": 300,
+  "__v": 0
+}]
