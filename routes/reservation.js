@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var RoomModel = require('../models/RoomModel');
-
 var TypeRoomModel = require('../models/TypeRoomModel');
 var ReservationModel = require('../models/ReservationModel');
-const checkLoginSession = require('../middlewares/auth');
+const {checkLoginSession} = require('../middlewares/auth');
 const UserModel = require('../models/UserModel');
 const { body, validationResult } = require('express-validator');
 
@@ -15,7 +14,7 @@ router.get('/', checkLoginSession, async (req, res) => {
 });
 router.get('/user', checkLoginSession, async (req, res) => {
     const reservations = await ReservationModel.find({ user: req.session.userId }).populate('room').populate('user');
-    res.render('reservation/indexUser', { reservations, layout: 'user_layout' });
+    res.render('reservation/indexUser', { reservations, layout: 'template_layout' });
 });
 router.get('/user/add', async (req, res) => {
     const userId = req.session.userId; // Assuming the user ID is stored in req.session.userId
@@ -126,7 +125,7 @@ router.post('/add',
         .custom((value, { req }) => {
             const checkOutDate = new Date(value);
             const checkInDate = new Date(req.body.checkInDate);
-            if (checkOutDate < checkInDate) {
+            if (checkOutDate <= checkInDate) {
                 throw new Error('Check-out date cannot be before Check-in date.');
             }
             return true;

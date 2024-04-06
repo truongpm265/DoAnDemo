@@ -50,6 +50,7 @@
           <li><a class="nav-link scrollto" href="#services">Services</a></li>
           <li><a class="nav-link   scrollto" href="#portfolio">Rooms</a></li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+          <li><a class="nav-link scrollto" href="/reservation/user">Reservation</a></li>
           {{#if username}}
             <li><a class="getstarted scrollto" href="/auth/logout">LOGOUT ({{ username }})</a></li>
           {{else}}
@@ -188,7 +189,7 @@
         <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
           {{#each roomList}}
           <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-            <div class="portfolio-img"><a href="/room/detail/{{_id}}">
+            <div class="portfolio-img"><a href="/reservation/add?roomId={{_id}}">
                 <img class="card-img-top " src="{{image}}" width="300" height="300" class="img-fluid" alt="">
               </a></div>
             <div class="portfolio-info">

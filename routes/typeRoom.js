@@ -15,7 +15,7 @@ router.get('/add', async(req, res)=>{
 router.post('/add', async(req,res) =>{
       var typeRoom = req.body;
       await TypeRoomModel.create(typeRoom);
-      res.redirect('/typeRoom');
+      res.redirect('/admin/manageTypeRoom');
 });
 
 router.get('/edit/:id', async(req,res)=>{
@@ -27,7 +27,7 @@ router.post('/edit/:id', async (req, res) => {
     var id = req.params.id;
     var data = req.body;
     await TypeRoomModel.findByIdAndUpdate(id, data);
-    res.redirect('/typeRoom');
+    res.redirect('/admin/manageTypeRoom');
  });
 
  router.get('/detail/:id', async (req, res) => {
@@ -38,6 +38,6 @@ router.post('/edit/:id', async (req, res) => {
  router.get('/delete/:id', async (req, res) => {
    var id = req.params.id;
    await TypeRoomModel.findByIdAndDelete(id);
-   res.redirect('/typeRoom');
+   res.redirect('/admin/manageTypeRoom');
 });
 module.exports = router;

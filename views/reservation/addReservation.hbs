@@ -109,6 +109,7 @@
                     <li><a class="nav-link scrollto" href="#services">Services</a></li>
                     <li><a class="nav-link   scrollto" href="#portfolio">Rooms</a></li>
                     <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+                    <li><a class="nav-link scrollto" href="/reservation/user">Reservation</a></li>
                     {{#if username}}
                     <li><a class="getstarted scrollto" href="/auth/logout">LOGOUT ({{ username }})</a></li>
                     {{else}}
@@ -125,6 +126,7 @@
         <main id="main">
 
             <body>
+                <br>
                 {{#each errors}}
                 <p class="error" style="background-color: #f44336;">{{this.msg}}</p>
                 {{/each}}
@@ -143,7 +145,7 @@
                                         <label for="checkOutDate">Check-Out Date:</label>
                                         <input type="date" id="checkOutDate" name="checkOutDate" required>
                                         <input class="btn btn-success" type="submit" value="Add">
-                                        <a class="btn btn-danger" href="/room">Cancel</a>
+                                        <a class="btn btn-danger" href="/">Cancel</a>
                                 </form>
                             </div>
                         </div>

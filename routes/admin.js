@@ -1,17 +1,18 @@
 var express = require('express');
 var router = express.Router();
-const checkLoginSession = require('../middlewares/auth');
+
 var RoomModel = require('../models/RoomModel');
 var TypeRoomModel = require('../models/TypeRoomModel');
 const ContactModel = require('../models/ContactModel');
 var ReservationModel = require('../models/ReservationModel');
-const checkAdminSession = require('../middlewares/auth');
+const {checkAdminSession,checkLoginSession} = require('../middlewares/auth');
 
 router.get('/', checkAdminSession, async (req, res) => {
     var reservationList = await ReservationModel.find({}).populate('room').populate('user');
     var contactList = await ContactModel.find({});
     var roomList = await RoomModel.find({}).populate('typeRoom');
-    res.render('admin/dashboard', { reservationList, contactList, roomList, layout: 'admin_layout' });
+    var cancelReservation = await ReservationModel.find({status: "Cancel"});
+    res.render('admin/dashboard', { reservationList, contactList,cancelReservation, roomList, layout: 'admin_layout' });
 });
 router.get('/manageRoom',checkAdminSession, async (req, res) => {
     var roomList = await RoomModel.find({}).populate('typeRoom');
