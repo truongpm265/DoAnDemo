@@ -3,86 +3,15 @@ var router = express.Router();
 var RoomModel = require('../models/RoomModel');
 var TypeRoomModel = require('../models/TypeRoomModel');
 var ReservationModel = require('../models/ReservationModel');
-const {checkLoginSession} = require('../middlewares/auth');
+const { checkLoginSession } = require('../middlewares/auth');
 const UserModel = require('../models/UserModel');
 const { body, validationResult } = require('express-validator');
 
 
-router.get('/', checkLoginSession, async (req, res) => {
-    var reservationList = await ReservationModel.find({}).populate('room').populate('user');
-    res.render('dashboard', { reservationList })
-});
 router.get('/user', checkLoginSession, async (req, res) => {
     const reservations = await ReservationModel.find({ user: req.session.userId }).populate('room').populate('user');
     res.render('reservation/indexUser', { reservations, layout: 'template_layout' });
 });
-router.get('/user/add', async (req, res) => {
-    const userId = req.session.userId; // Assuming the user ID is stored in req.session.userId
-    const user = await UserModel.findById(userId);
-    const rooms = await RoomModel.find({});
-    res.render('reservation/addUser', { rooms, user, layout: 'user_layout' });
-});
-router.post('/user/add', [
-    body('checkInDate')
-        .isDate().withMessage('Check-in date is not valid.')
-        .custom((value) => {
-            const checkInDate = new Date(value);
-            const today = new Date();
-            if (checkInDate < today) {
-                throw new Error('Check-in date cannot be in the past.');
-            }
-            return true;
-        }),
-    body('checkOutDate').isDate().withMessage('Check-out date is not valid.')
-        .custom((value, { req }) => {
-            const checkOutDate = new Date(value);
-            const checkInDate = new Date(req.body.checkInDate);
-            if (checkOutDate < checkInDate) {
-                throw new Error('Check-out date cannot be before Check-in date.');
-            }
-            return true;
-        }),
-
-], async function (req, res, next) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        // There are errors. Render the form again with sanitized values/error messages.
-        const rooms = await RoomModel.find({});
-        res.render('reservation/addUser', {
-            title: 'Add Reservation',
-            reservation: req.body,
-            rooms,
-            errors: errors.array()
-        });
-        return;
-    }
-    const user = await UserModel.findById(req.session.userId);
-    if (!user) {
-        res.render('reservation/addUser', {
-            title: 'Add Reservation',
-            reservation: req.body,
-            rooms,
-            errors: [{ msg: 'User does not exist.' }]
-        });
-        return;
-    }
-
-    const { rooms, checkInDate, checkOutDate } = req.body;
-    const userId = req.session.userId;
-    const room = await RoomModel.findById(rooms);
-    var totalPrice = calculateTotalPrice(room.pricePerNight, checkInDate, checkOutDate);
-    const reservation = new ReservationModel({
-        room: rooms,
-        user: userId,
-        checkInDate,
-        checkOutDate,
-        totalPrice,
-        status: "Pending",
-    });
-    await reservation.save();
-    res.redirect('/reservation/user');
-});
-
 
 router.get('/add', async (req, res) => {
     roomId = req.query.roomId;
@@ -90,98 +19,98 @@ router.get('/add', async (req, res) => {
     roomName = room.name;
     roomPrice = room.pricePerNight;
     roomImage = room.image;
-    res.render('reservation/addReservation', { roomId, roomName, roomPrice,roomImage, layout: 'template_layout'});
+    res.render('reservation/addReservation', { roomId, roomName, roomPrice, roomImage, layout: 'template_layout' });
 });
 router.post('/add',
-[
+    [
 
-    body('roomId').custom(async() => {
-        const room = await RoomModel.findById(roomId);
-        if (!room) {
-            throw new Error('Room does not exist.');
-        }
-        if (!room.availability) {
-            throw new Error('Room is not available.');
-        }
-        return true;
-    }),
-    body('userId').custom((value, { req }) => {
-        if (!req.session.userId) {
-            throw new Error('No user logged in. Please login');
-        }
-        return true;
-    }),
-    body('checkInDate')
-        .isDate().withMessage('Check-in date is not valid.')
-        .custom((value) => {
-            const checkInDate = new Date(value);
-            const today = new Date();
-            if (checkInDate < today) {
-                throw new Error('Check-in date cannot be in the past.');
+        body('roomId').custom(async () => {
+            const room = await RoomModel.findById(roomId);
+            if (!room) {
+                throw new Error('Room does not exist.');
+            }
+            if (!room.availability) {
+                throw new Error('Room is not available.');
             }
             return true;
         }),
-    body('checkOutDate').isDate().withMessage('Check-out date is not valid.')
-        .custom((value, { req }) => {
-            const checkOutDate = new Date(value);
-            const checkInDate = new Date(req.body.checkInDate);
-            if (checkOutDate <= checkInDate) {
-                throw new Error('Check-out date cannot be before Check-in date.');
+        body('userId').custom((value, { req }) => {
+            if (!req.session.userId) {
+                throw new Error('No user logged in. Please login');
             }
             return true;
         }),
+        body('checkInDate')
+            .isDate().withMessage('Check-in date is not valid.')
+            .custom((value) => {
+                const checkInDate = new Date(value);
+                const today = new Date();
+                if (checkInDate < today) {
+                    throw new Error('Check-in date cannot be in the past.');
+                }
+                return true;
+            }),
+        body('checkOutDate').isDate().withMessage('Check-out date is not valid.')
+            .custom((value, { req }) => {
+                const checkOutDate = new Date(value);
+                const checkInDate = new Date(req.body.checkInDate);
+                if (checkOutDate <= checkInDate) {
+                    throw new Error('Check-out date cannot be before Check-in date.');
+                }
+                return true;
+            }),
 
-], async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        // There are errors. Render the form again with sanitized values/error messages.
+    ], async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            // There are errors. Render the form again with sanitized values/error messages.
+            const roomId = req.query.roomId;
+            const room = await RoomModel.findById(roomId);
+            const roomName = room.name;
+            const roomPrice = room.pricePerNight;
+            const roomImage = room.image;
+
+
+            res.render('reservation/addReservation', {
+                title: 'Add Reservation',
+                layout: 'template_layout',
+                reservation: req.body,
+                rooms: room,
+                roomName: roomName,
+                roomPrice: roomPrice,
+                roomImage: roomImage,
+                status: "Pending",
+                errors: errors.array()
+            });
+            return;
+        }
+
+
+        const { checkInDate, checkOutDate } = req.body;
         const roomId = req.query.roomId;
+        const userId = req.session.userId;
         const room = await RoomModel.findById(roomId);
-        const roomName = room.name;
-        const roomPrice = room.pricePerNight;
-        const roomImage = room.image;
-        
-        
-        res.render('reservation/addReservation', {
-            title: 'Add Reservation',
-            layout: 'template_layout',
-            reservation: req.body,
-            rooms: room,
-            roomName: roomName,
-            roomPrice: roomPrice,
-            roomImage: roomImage,
+        roomName = room.name;
+        roomPrice = room.pricePerNight;
+        const pricePerNight = room.pricePerNight;
+        var totalPrice = calculateTotalPrice(pricePerNight, checkInDate, checkOutDate);
+        req.session.reservation = {
+            room: roomId,
+            user: userId,
+            checkInDate: req.body.checkInDate,
+            checkOutDate: req.body.checkOutDate,
+            totalPrice: totalPrice,
             status: "Pending",
-            errors: errors.array()
-        });
-        return;
-    }
-    
-    
-    const { checkInDate, checkOutDate } = req.body;
-    const roomId = req.query.roomId;
-    const userId = req.session.userId;
-    const room = await RoomModel.findById(roomId);
-    roomName = room.name;
-    roomPrice = room.pricePerNight;
-    const pricePerNight = room.pricePerNight;
-    var totalPrice = calculateTotalPrice(pricePerNight, checkInDate, checkOutDate);
-    req.session.reservation = {
-        room: roomId,
-        user: userId,
-        checkInDate: req.body.checkInDate,
-        checkOutDate: req.body.checkOutDate,
-        totalPrice: totalPrice,
-        status: "Pending",
-    };
-    // await reservation.save();
-    res.redirect('/reservation/confirmReservation');
-    
-});
+        };
+        // await reservation.save();
+        res.redirect('/reservation/confirmReservation');
+
+    });
 
 
 router.get('/confirmReservation', async function (req, res, next) {
     // Render the confirmation page with the reservation data
-   
+
     res.render('reservation/confirmReservation', {
         title: 'Confirm Reservation',
         reservation: req.session.reservation, // Assuming the reservation data is stored in the session
@@ -198,10 +127,10 @@ router.post('/confirmReservation', async function (req, res, next) {
     await reservation.save();
 
     // Clear reservation from session
-        //delete req.session.reservation;
+    //delete req.session.reservation;
 
     // Redirect to reservations page
-        // res.redirect('/test');
+    // res.redirect('/test');
     res.redirect('/reservation/create_payment_url');
 });
 router.get('/create_payment_url', async function (req, res, next) {
@@ -210,7 +139,7 @@ router.get('/create_payment_url', async function (req, res, next) {
     var roomName = room.name;
     var roomPrice = room.pricePerNight;
     var des = 'Thanh toan phong nghi ' + roomName + ' voi gia ' + req.session.reservation.totalPrice + ' VND';
-    res.render('order', {reservation: req.session.reservation,roomName,roomPrice,des,layout: 'template_layout'})
+    res.render('order', { reservation: req.session.reservation, roomName, roomPrice, des, layout: 'template_layout' })
 });
 
 router.post('/create_payment_url', async function (req, res, next) {
@@ -230,18 +159,18 @@ router.post('/create_payment_url', async function (req, res, next) {
     var returnUrl = 'http://localhost:3000/reservation/user';
 
     var date = new Date();
-    var createDate =  dateFormat(date, 'yyyymmddHHmmss');
+    var createDate = dateFormat(date, 'yyyymmddHHmmss');
 
-    var orderId =  dateFormat(date, 'yyyymmddHHmmss');
+    var orderId = dateFormat(date, 'yyyymmddHHmmss');
 
     var amount = req.session.reservation.totalPrice;
-    var bankCode = 	'NCB';
-    
+    var bankCode = 'NCB';
+
     var orderInfo = req.session.reservation.user + ' Thanh toan phong nghi ' + room.name + ' voi gia ' + req.session.reservation.totalPrice + ' VND';
     var orderType = 'Thanh toan phong tai BeeHouse';
 
     var locale = req.body.language;
-    if(locale === null || locale === ''){
+    if (locale === null || locale === '') {
         locale = 'vn';
     }
 
@@ -260,7 +189,7 @@ router.post('/create_payment_url', async function (req, res, next) {
     vnp_Params['vnp_ReturnUrl'] = returnUrl;
     vnp_Params['vnp_IpAddr'] = ipAddr;
     vnp_Params['vnp_CreateDate'] = createDate;
-    if(bankCode !== null && bankCode !== ''){
+    if (bankCode !== null && bankCode !== '') {
         vnp_Params['vnp_BankCode'] = bankCode;
     }
 
@@ -268,14 +197,14 @@ router.post('/create_payment_url', async function (req, res, next) {
 
     var querystring = require('qs');
     var signData = querystring.stringify(vnp_Params, { encode: false });
-    var crypto = require("crypto");     
+    var crypto = require("crypto");
     var hmac = crypto.createHmac("sha512", secretKey);
-    var signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex"); 
+    var signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
     vnp_Params['vnp_SecureHash'] = signed;
     vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
 
     res.redirect(vnpUrl)
-    
+
 });
 
 
@@ -287,15 +216,15 @@ function calculateTotalPrice(pricePerNight, checkInDate, checkOutDate) {
     return pricePerNight * nights;
 }
 function sortObject(obj) {
-	var sorted = {};
-	var str = [];
-	var key;
-	for (key in obj){
-		if (obj.hasOwnProperty(key)) {
-		str.push(encodeURIComponent(key));
-		}
-	}
-	str.sort();
+    var sorted = {};
+    var str = [];
+    var key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            str.push(encodeURIComponent(key));
+        }
+    }
+    str.sort();
     for (key = 0; key < str.length; key++) {
         sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
     }

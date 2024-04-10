@@ -12,7 +12,9 @@ router.get('/', checkAdminSession, async (req, res) => {
     var contactList = await ContactModel.find({});
     var roomList = await RoomModel.find({}).populate('typeRoom');
     var cancelReservation = await ReservationModel.find({status: "Cancel"});
-    res.render('admin/dashboard', { reservationList, contactList,cancelReservation, roomList, layout: 'admin_layout' });
+    var pendingReservation = await ReservationModel.find({status: "Pending"});
+    var confirmReservation = await ReservationModel.find({status: "Confirm"});
+    res.render('admin/dashboard', { reservationList, contactList,cancelReservation,pendingReservation, confirmReservation, roomList, layout: 'admin_layout' });
 });
 router.get('/manageRoom',checkAdminSession, async (req, res) => {
     var roomList = await RoomModel.find({}).populate('typeRoom');

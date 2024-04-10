@@ -12,15 +12,20 @@ router.get('/register', (req, res) => {
 
 router.post('/register', async (req, res) => {
    try {
+
       var userRegistration = req.body;
-      var hashPassword = bcrypt.hashSync(userRegistration.password, salt);
-      var user = {
-         username: userRegistration.username,
-         password: hashPassword,
-         role: 'user'
+      if (userRegistration.password == userRegistration.reptype) {
+         var hashPassword = bcrypt.hashSync(userRegistration.password, salt);
+         var user = {
+            username: userRegistration.username,
+            password: hashPassword,
+            role: 'user'
+         }
+         await UserModel.create(user);
+         res.redirect('/auth/login')
+      } else {
+         res.render('auth/register', { layout: 'auth_layout', error: 'Password and retype do not match' });
       }
-      await UserModel.create(user);
-      res.redirect('/auth/login')
    } catch (err) {
       res.send(err)
    }
@@ -49,8 +54,10 @@ router.post('/login', async (req, res) => {
             }
          }
          else {
-            res.redirect('/auth/login');
+            res.render('auth/login', { layout: 'auth_layout', error: 'Invalid username or password' });
          }
+      } else {
+         res.render('auth/login', { layout: 'auth_layout', error: 'Invalid username or password' });
       }
    } catch (err) {
       res.send(err)
