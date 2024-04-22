@@ -61,7 +61,7 @@ app.use('/typeRoom',typeRoomRouter);
 app.use('/reservation',reservationRouter);
 app.use('/auth', authRouter);
 app.use('/admin',adminRouter);
-
+app.get('/');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
