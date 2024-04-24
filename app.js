@@ -29,8 +29,8 @@ app.use(session({
 
 
 var mongoose = require('mongoose');
-var database = "mongodb://localhost:27017/finalProject";
-//var database = "mongodb+srv://truongpmgch200134:ClkZb5zrbdVTBsgS@beehouse.tfqdh7h.mongodb.net/finalProject";
+//var database = "mongodb://localhost:27017/finalProject";
+var database = "mongodb+srv://truongpmgch200134:ClkZb5zrbdVTBsgS@beehouse.tfqdh7h.mongodb.net/finalProject";
 
 mongoose.connect(database)
   .then(() => console.log('Connect to db successfull !'))
