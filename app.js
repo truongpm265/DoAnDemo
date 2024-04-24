@@ -14,7 +14,8 @@ var authRouter = require('./routes/auth');
 var adminRouter = require('./routes/admin');
 
 
-var app = express();
+var app = express(); 
+var port = process.env.PORT || 4000;
 var session = require('express-session');
 //set session timeout
 const timeout = 10000 * 60 * 60 * 24;  // 24 hours (in milliseconds)
@@ -28,7 +29,7 @@ app.use(session({
 
 
 var mongoose = require('mongoose');
-// var database = "mongodb://localhost:27017/finalProject";
+//var database = "mongodb://localhost:27017/finalProject";
 var database = "mongodb+srv://truongpmgch200134:ClkZb5zrbdVTBsgS@beehouse.tfqdh7h.mongodb.net/finalProject";
 
 mongoose.connect(database)
@@ -85,5 +86,8 @@ hbs.registerHelper('formatDate', function(date) {
 hbs.registerHelper('eq', function(a,b) {
   return a === b;
 });
+var listener = app.listen(port, function(){
+  console.log('Listening on port ' + listener.address().port); //Listening on port 8888
+  }); 
 
 module.exports = app;
