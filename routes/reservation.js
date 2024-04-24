@@ -156,7 +156,8 @@ router.post('/create_payment_url', async function (req, res, next) {
     var tmnCode = 'T9TJG1NH';
     var secretKey = 'PVURTHUFKBJQLMHUVOVYNQSRPMXOXVXE';
     var vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-    var returnUrl = 'http://localhost:3000/reservation/user';
+    // var returnUrl = 'http://localhost:3000/reservation/user';
+    var returnUrl = 'https://beehouse-df9t.onrender.com/reservation/user';
 
     var date = new Date();
     var createDate = dateFormat(date, 'yyyymmddHHmmss');
