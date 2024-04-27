@@ -12,9 +12,8 @@ router.get('/register', (req, res) => {
 
 router.post('/register', async (req, res) => {
    try {
-
       var userRegistration = req.body;
-      if (userRegistration.password == userRegistration.reptype) {
+      if (userRegistration.password === userRegistration.retype) {
          var hashPassword = bcrypt.hashSync(userRegistration.password, salt);
          var user = {
             username: userRegistration.username,
